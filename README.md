@@ -18,8 +18,16 @@ It's already possible to do this, but the raquamaps package offers an open sourc
 If you want to install the latest version of the raquamaps package from github, you can do it like so:
 
 ```console
-install.packages("devtools")  # if you don't have it already
-install_github("raquamaps/raquamaps")  # may require RCurl ie install.packages("RCurl")
+ # if you don't have it already, you need
+install.packages("devtools") 
+
+# install with this, may require RCurl
+# you can install RCurl with ...
+# install.packages("RCurl")
+install_github("raquamaps/raquamaps")  
+
+# you could avoid installing RCurl by using
+install_git("https://github.com/raquamaps/raquamaps.git")
 ```
 
 ## Building
