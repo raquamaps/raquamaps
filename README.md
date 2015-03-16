@@ -18,15 +18,15 @@ It's already possible to do this, but the raquamaps package offers an open sourc
 If you want to install the latest version of the raquamaps package from github, you can do it like so:
 
 ```console
- # if you don't have it already, you need
+ # if you do not yet have it, install it with
 install.packages("devtools") 
 
-# install with this, may require RCurl
-# you can install RCurl with ...
+# install the raquamaps package from github with this command
+# which may require RCurl, if so you can first install RCurl with ...
 # install.packages("RCurl")
 install_github("raquamaps/raquamaps")  
 
-# you could avoid installing RCurl by using
+# ... or you could install without the RCurl requirement with this:
 install_git("https://github.com/raquamaps/raquamaps.git")
 ```
 
@@ -51,7 +51,7 @@ Don't forget to put the .tar.gz source tarball into the archive-tarball director
 
 ## Quick Start
 
-Here are some quick examples to get you started. 
+To see some quick examples to get you started, open the `dev_alg.r` file.
 
 __Example 1: Interactive raquamaps__
 
