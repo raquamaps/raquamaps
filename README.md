@@ -1,21 +1,42 @@
 <link href='http://fonts.googleapis.com/css?family=IM+Fell+Double+Pica+SC' rel='stylesheet' type='text/css'>
 
 <h1 style="font-family:'IM Fell Double Pica SC', serif;">
-  <font color="#deebf7">r</font><font color="#3182bd">A</font><font color="#9ecae1">qua</font><font color="#3182bd">M<font color="#9ecae1">aps</font>
+  <font color="#deebf7">r</font><font color="#3182bd">a</font><font color="#9ecae1">qua</font><font color="#3182bd">m<font color="#9ecae1">aps</font>
 </h1>
 
-rAquaMaps is a set of tools that make it easier to produce Aqua Maps - model-based large-scale predictions of natural occurrences of marine species.
+raquamaps is a set of tools that make it easier to produce Aqua Maps - model-based large-scale predictions of natural occurrences of marine species.
 
 The model uses estimates of environmental preferences with respect to depth, water temperature, salinity, primary productivity, and association with sea ice or coastal areas. These estimates of species preferences, called environmental envelopes, are derived from large sets of occurrence data available from online collection databases.
 
 This package can be used in an IDE like RStudio or from an application like QGIS or the embedded UI can be used directly from a web browser in order to generate predicted distribution maps for marine species.
 
-It's already possible to do this, but the rAquaMaps package offers an open source alternative to the earlier MS Access based solution, which simplifies licensing issues and creates a solution which is easier to maintain and develop further.
+It's already possible to do this, but the raquamaps package offers an open source alternative to the earlier MS Access based solution, which simplifies licensing issues and creates a solution which is easier to maintain and develop further.
 
+
+## Installing from github
+
+If you want to install the latest version of the raquamaps package from github, you can do it like so:
+
+```console
+install.packages("devtools")  # if you don't have it already
+install_github("raquamaps/raquamaps")  # may require RCurl ie install.packages("RCurl")
+```
 
 ## Building
 
 Open the raquamaps directory's .Rproj file in RStudio and use the Build tab to build a source tarball (it will use the version number in the DESCRIPTION file). 
+
+You may need to install a few libraries for the build to go through. R libraries can be installed from within RStudio. Or you could do it at the R prompt with.
+
+```console
+install.packages("RCurl")  
+```
+
+On some linux distros you may need system libraries, can be installed like so:
+
+```console
+sudo apt-get install libgdal1-dev libproj-dev libcurl4-openssl-dev
+```
 
 Don't forget to put the .tar.gz source tarball into the archive-tarball directory before pushing changes to gitorious/github.
 
@@ -24,7 +45,7 @@ Don't forget to put the .tar.gz source tarball into the archive-tarball director
 
 Here are some quick examples to get you started. 
 
-__Example 1: Interactive rAquaMaps__
+__Example 1: Interactive raquamaps__
 
 [Click to see Interactive Map](https://raquamaps.github.io/demo)
 
@@ -32,13 +53,13 @@ __Example 1: Interactive rAquaMaps__
 
 TODO: Rewrite this!
 
-rAquaMaps would have not been possible without many amazing R libraries, such as
+raquamaps would have not been possible without many amazing R libraries, such as
 
 * dplyr, stringr etc from Hadley Wickham
 * rgbif, rfishbase etc from ROpenSci
 * rMaps
 
-rAquaMaps uses the rMaps R package to create, customize and publish interactive maps that depicts the predicted species distribution occurrence patterns. The rMaps package supports multiple mapping libraries, including [leaflet](http://leafletjs.com), [datamaps](http://datamaps.github.io) and [crosslet](http://sztanko.github.io/crosslet/)
+raquamaps uses the rMaps R package to create, customize and publish interactive maps that depicts the predicted species distribution occurrence patterns. The rMaps package supports multiple mapping libraries, including [leaflet](http://leafletjs.com), [datamaps](http://datamaps.github.io) and [crosslet](http://sztanko.github.io/crosslet/)
 
 ## References
 
@@ -52,4 +73,4 @@ rAquaMaps uses the rMaps R package to create, customize and publish interactive 
 
 ### License
 
-rAquaMaps is licensed under the AGPL license.
+raquamaps is licensed under the AGPL license.
