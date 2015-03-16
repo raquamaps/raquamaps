@@ -1,2 +1,55 @@
-# raquamaps
-R package with various tools to support Aqua Maps generation
+<link href='http://fonts.googleapis.com/css?family=IM+Fell+Double+Pica+SC' rel='stylesheet' type='text/css'>
+
+<h1 style="font-family:'IM Fell Double Pica SC', serif;">
+  <font color="#deebf7">r</font><font color="#3182bd">A</font><font color="#9ecae1">qua</font><font color="#3182bd">M<font color="#9ecae1">aps</font>
+</h1>
+
+rAquaMaps is a set of tools that make it easier to produce Aqua Maps - model-based large-scale predictions of natural occurrences of marine species.
+
+The model uses estimates of environmental preferences with respect to depth, water temperature, salinity, primary productivity, and association with sea ice or coastal areas. These estimates of species preferences, called environmental envelopes, are derived from large sets of occurrence data available from online collection databases.
+
+This package can be used in an IDE like RStudio or from an application like QGIS or the embedded UI can be used directly from a web browser in order to generate predicted distribution maps for marine species.
+
+It's already possible to do this, but the rAquaMaps package offers an open source alternative to the earlier MS Access based solution, which simplifies licensing issues and creates a solution which is easier to maintain and develop further.
+
+
+## Building
+
+Open the raquamaps directory's .Rproj file in RStudio and use the Build tab to build a source tarball (it will use the version number in the DESCRIPTION file). 
+
+Don't forget to put the .tar.gz source tarball into the archive-tarball directory before pushing changes to gitorious/github.
+
+
+## Quick Start
+
+Here are some quick examples to get you started. 
+
+__Example 1: Interactive rAquaMaps__
+
+[Click to see Interactive Map](https://raquamaps.github.io/demo)
+
+### Credits
+
+TODO: Rewrite this!
+
+rAquaMaps would have not been possible without many amazing R libraries, such as
+
+* dplyr, stringr etc from Hadley Wickham
+* rgbif, rfishbase etc from ROpenSci
+* rMaps
+
+rAquaMaps uses the rMaps R package to create, customize and publish interactive maps that depicts the predicted species distribution occurrence patterns. The rMaps package supports multiple mapping libraries, including [leaflet](http://leafletjs.com), [datamaps](http://datamaps.github.io) and [crosslet](http://sztanko.github.io/crosslet/)
+
+## References
+
+* Kaschner, K., R. Watson, A.W. Trites and D. Pauly. 2006. Mapping worldwide distributions of marine mammals using a Relative Environmental Suitability (RES) model. Mar. Ecol. Prog. Ser. 316:285-310.
+
+* Ready, J., K. Kaschner, A.B. South, P.D. Eastwood, T. Rees, J. Rius, E. Agbayani, S. Kullander, and R. Froese. 2010. Predicting the distributions of marine organisms at the global scale. Ecol. Model. 221: 467-478, doi:10.1016/j.ecolmodel.2009.10.025
+
+* Kesner-Reyes, K., K. Kaschner, S. Kullander, C. Garilao, J. Barile, and R. Froese. 2012. AquaMaps: algorithm and data sources for aquatic organisms. In: Froese, R. and D. Pauly. Editors. 2012. FishBase. World Wide Web electronic publication. www.fishbase.org, version (04/2012).
+
+* Östergren J, Kullander S O, Prud'homme O, Reyes K K, Kaschner K and Froese R (in preparation) Predicting freshwater-dependent species distributions in Europe
+
+### License
+
+rAquaMaps is licensed under the AGPL license.
