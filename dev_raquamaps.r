@@ -75,3 +75,5 @@ saveRDS(hcaf, "data/hcaf.rds")
 
 browseURL(system.file("www/index.html", package="raquamaps"))
 
+require("devtools")
+devtools::build_vignettes()

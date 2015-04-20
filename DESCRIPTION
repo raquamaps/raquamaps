@@ -8,7 +8,7 @@ Author: Onésimme Prud'homme, Markus Skyttner
 Maintainer: Markus Skyttner <markus.skyttner@nrm.se>
 Description: This package is a programmatic interface to Aquamaps.org
 License: AGPL
-Imports:
+Imports: 
     raster,
     rgbif,
     dplyr,
@@ -16,3 +16,5 @@ Imports:
     stringr,
     foreign,
     crayon
+Suggests: knitr
+VignetteBuilder: knitr

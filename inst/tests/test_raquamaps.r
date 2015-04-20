@@ -21,3 +21,4 @@ test_that("Can get HCAF ref data from dropbox folder", {
 #  expect_equal(get_dropbox_as_zip(dropbox_share), 0)
   return (TRUE)
 })
+
