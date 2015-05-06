@@ -1,81 +1,75 @@
 ---
-title: "Introduction to raquamaps"
+Title: "raquamaps"
 author: "Markus Skyttner"
 date: "`r Sys.Date()`"
-output: rmarkdown::html_vignette
-vignette: >
-  %\VignetteIndexEntry{Vignette Title}
-  %\VignetteEngine{knitr::rmarkdown}
-  \usepackage[utf8]{inputenc}
+output:
+  html_document:
+    theme: cosmo
+    highlight: textmate
 ---
+<!--
+%\VignetteEngine{knitr::rmarkdown}
+%\VignetteIndexEntry{raquamaps}
+  \usepackage[utf8]{inputenc}
+-->
 
-This vignette is a long form documentation included in the raquamaps to describe some common usage scenarios. 
+<!--
+theme specifies the Bootstrap theme to use for the page (themes are drawn from the Bootswatch theme library). Valid themes include "default", "cerulean", "journal", "flatly", "readable", "spacelab", "united", and "cosmo". Pass null for no theme (in this case you can use the css parameter to add your own styles).
+
+highlight specifies the syntax highlighting style. Supported styles include "default", "tango", "pygments", "kate", "monochrome", "espresso", "zenburn", "haddock", and "textmate". Pass null to prevent syntax highlighting.
+-->
+
+# Using raquamaps
+
+This vignette is a long form documentation included in the raquamaps R package with the intention to describe some common usage scenarios, for example:
 
 - For a given species, calculate and generate a distribution map and output in csv format
 - For a list of species, generate several maps and output in raster format
 
-## Get presence data for a given species
+## Some useful packages to use with raquamaps
 
-Using the built-in reference dataset you can get some presence data to work with like this:
+First some recommended R packages that are useful when working with `raquamaps`, in order to facilitate plotting, data manipulation and data retrieval:
 
--- TODO
+```{r, echo=TRUE, message=FALSE, warning=FALSE}
 
-Using rgbif you can get reference data for any species like so:
+# plotting
+require("classInt")
+require("ggplot2")
+require("raster")
+require("RColorBrewer")
 
--- TODO
-
-You can visualize this presence data in raster formal like so:
-
--- TODO
-
-## Calculate distribution probabilities
-
-Now that we have the presence data for one species, we can calculate the environmental envelope or spread values.
-
--- TODO
-
-For the whole half degree cells grid we can then calculate probabilites for presence:
-
---TODO
-
-## Restrict output to areas with known presence
-
--- TODO write this
-
-## Loading reference data
-
-Here we start to load some reference data
-
-```{r, echo=TRUE}
-
+# data manipulation
 require("plyr")
 require("dplyr")
 require("reshape2")
+
+# data modelling
+require("rgbif")
 require("raquamaps")
 
-
+# we set our preference for how 
+# we choose to interpret string data 
+# throughout this tutorial
 options(stringsAsFactors = FALSE)
 
-# relevant environmental parameters
-clim_vars <- c(
-  "Elevation",
-  "TempMonthM",
-  "NPP",
-  "SoilpH",
-  "SoilMoistu",
-  "PrecipAnMe",
-  "CTI_Max",
-  "SoilCarbon"
-  #  "annual runoff"?
-)
+```
 
-# load demo data from raquamaps
+## How to access and use the bundled reference data
 
+This package comes with some bundled reference data that can be used for demonstrational purposes and in off-line situations. For real use cases, it is recommended to use on-line services or tools for getting up-to-date reference data, such as the rgbif R package.
+
+Before showing some convenience functions that simplify accessing reference data, here is how you can access bundled reference datasets directly:
+
+```{r}
+# Define a helper function to load reference data from 
+# an R package as a data frame
 get_am_data <- function(x) 
   tbl_df(get(data(list = x)))
 
+# Explicit listing of names of relevant datasets 
+# that are bundled into the package
 ds <- c(
-  # half degree cell authority files w bioclimate data for EUR
+  # half degree cell authority file w bioclimate data for EUR
   "aquamapsdata_HCAF_EU_Grid_WGS84", 
   # presence data for one species
   "aquamapsdata_GoodCelles_galemys_pyrenaicus_WGS84",  
@@ -92,39 +86,76 @@ ds <- c(
   "aquamapsdata_presence_basins"
 )
 
-# load the cell authority fields, data for half degree cells
-# including geometry and bioclimate mesurements and clean up
-
-
-
-replace_9999 <- function(x) 
-  ifelse(round(x) == -9999, NA, x)
-
+# Here we load the European cell authority fields, ie half degree cell
+# data including geometry and an explicitly defined set of bioclimate 
+# variables 
+clim_vars <- c(
+  "Elevation", 
+  "TempMonthM", 
+  "NPP", 
+  "SoilpH", 
+  "SoilMoistu", 
+  "PrecipAnMe", 
+  "CTI_Max", 
+  "SoilCarbon")
 hcaf <- get_am_data(ds[1]) %>%
   # discard irrelevant fields
   # and rename the cell identifier column name to
   # harmonize with the other datasets
-  dplyr::select(loiczid = LOICZID, one_of(clim_vars)) 
+  select(loiczid = LOICZID, one_of(clim_vars)) 
 
-hcaf %>%
+# Define a cleanup function, intended for use across columns
+replace_9999 <- function(x) 
+  ifelse(round(x) == -9999, NA, x)
+
+# How to apply the above cleanup function across columns, dplyr style
+hcaf_eu <- 
+  hcaf %>%
   # recode values across climate variable columns 
-  # substitute -9999, use NA instead
+  # substitute -9999, use NA instead, exclude the "loiczid" column
   mutate_each(funs(replace_9999), -loiczid)
 
-# load presence data for one species - Galemys pyrenaicus
-presence_tbl <- get_am_data(ds[2])
+hcaf_eu
+```
 
-# load occurrence data for several species
-presence_occs <- get_am_data(ds[3]) %>%
-  # use boolean instead of text to indicate presence
-  mutate(occurrence = (occurrence == "t")) %>%
-  # clean up input data - discard irrelevant fields
-  select(-csquarecode)
+There are some convenient helper functions that simplifies access and provides some relevant defaults for use with the demonstrational reference data that is bundled in the package:
 
-# free memory - remove unneeded variables
-rm(list = ds, ds, presence_occs_tbl)
+```{r}
+# Suggested set of bioclimate variables
+clim_vars <- default_clim_vars()
 
-# get the grid cell ids with presence for a given species
+# One specific species name - the default species - Galemys pyrenaicus
+species <- default_species()
+
+# Several species names available in the reference data
+species_list <- default_species_list()
+
+# European half degree cell reference data for some relevant bioclimate variables
+hcaf_eu <- default_hcaf()
+
+# Presence data for all species in the bundled
+# reference data, including grid cell identifiers (loiczids)
+presence_occs <- default_presence()
+
+# Showing a "dplyr inspired way" to load presence data
+# which demonstrates using dplyr API with a
+# "pipe" operator that chains operations together sequentially, 
+# each step sending its output as input to the next step, 
+# going from left to right
+presence_galemys <- 
+  default_presence() %>% 
+  filter(lname == default_species())
+
+# Yet another way to display grid cell identifiers (loiczids) 
+# for the default species 
+presence_loiczids <- 
+  presence_occs %>%
+  filter(lname == default_species()) %>%
+  group_by(loiczid) %>%
+  summarise(count = n()) %>%
+  arrange(desc(count))
+
+# Another variant on the same thing
 presence_galemys_pyrenaicus <- 
   presence_occs %>%
   # retain only records for a specific latin name
@@ -134,15 +165,11 @@ presence_galemys_pyrenaicus <-
   #  group_by(loiczid) %>%
   select(loiczid)
 
-# inspect the first few rows
-head(hcaf, 3)
-
-# extract a list of all latin names 
-# for all species in the occurrence dataset
-# ordered with the species with the widest
-# distribution at the top
-species_list <-
-  presence_occs %>%
+# Get a list of all latin names  for all species in the 
+# bundled occurrence dataset ordered with the species with 
+# the most dispersed distribution (ie highest number of distinct 
+# different cells) at the top
+presence_occs %>%
   group_by(lname) %>%
   summarise(count = n_distinct(loiczid)) %>%
   arrange(desc(count)) %>%
@@ -150,300 +177,247 @@ species_list <-
 
 ```
 
-## Getting data using rgbif and taxize
+## Typical workflow
 
-Instead of using the prepackaged reference data, you will probably want to get data from GBIF. Here is an illustration of how to do this.
+Now that we can retrieve presence data for one species using the bundled reference data, we can show the workflow for calculating the environmental envelope or spread values.
 
-```{r, echo=TRUE}
-# use taxize and rgbif to load presence data
+```{r}
+# We find bioclimate variable data from half degree cells
+# where a specific species has been present
+hcaf_galemys <- hcaf_by_species("galemys pyrenaicus")
 
-# TODO
+# We determine the spreads across these particular grid cells
+# ie calculate the environmental envelope for the species
+spreads_galemys <- calc_spreads(hcaf_galemys)
+
+# We can also use this wrapper function for convenience
+calc_spreads_by_species("galemys pyrenaicus")
 
 ```
 
-## More illustrations
+Now, across various other half degree grid cells, where we have similar bioclimate variable information available, we can calculate relative probabilites for presence, assuming that similar spreads in the species' environmental bioclimate variables would indicate a suitable habitat:
+
+```{r}
+# Calculate probabilites across European grid cells, 
+# given this particular species preference for environmental envelopes
+hcaf_eu <- default_hcaf()
+
+# You can inspect the model used by inspecting the calc_prob and calc_probs 
+# functions, ie uncomment lines below and run in R to inspect the functions:
+# calc_prob
+# calc_probs
+# You can see how prod_p is calculated in the calc_probs function, ie:
+# prod_p = Elevation * TempMonthM * NPP * SoilpH * 
+#        SoilMoistu * PrecipAnMe * CTI_Max * SoilCarbon
+# where those factors are individual p values determined by calc_prob using
+# the spread or environmental envelope preference
+probs <- calc_probs(hcaf_eu, spreads_galemys)
+
+# Define custom plot style to use in ggplot2 plots
+theme_raquamaps <- function() {
+  theme <- theme_bw() + theme(
+      axis.text.x = element_text(size = 10),
+      axis.text.y = element_text(size = 10),
+      panel.background = element_blank(), 
+      plot.background = element_blank(),
+      panel.grid.minor = element_blank(), 
+      panel.grid.major = element_blank())
+}
+
+# Plot a histogram of the probabilities  
+ggplot(probs, aes(x = probs$p)) + theme_raquamaps() +
+  geom_bar(fill = "darkgreen", colour = "darkgray")
+
+```
+
+## Using presence data from gbif
+
+Instead of using the prepackaged reference data, you will probably want to get data from GBIF. Here is an illustration of how to do this conveniently by using the rgbif R package:
 
 ```{r, echo=TRUE}
 
-# find all grid cells where the specified species occurrs
-which_cells <- function(.latinname) {
-  presence_occs %>%
-    filter(
-      occurrence == TRUE, 
-      lname %in% .latinname
-    ) %>%
-    distinct(loiczid) %>%
-    arrange(desc(loiczid)) %>%
-    select(loiczid)
-}
+# Get presence data for Great White Shark from rgbif
+jagged_tooth <- "galemys pyrenaicus"
+#jagged_tooth <- "Carcharodon carcharias"
+gws <- presence_rgbif(jagged_tooth)
 
-# let's pretend we have two synonyms, get cells for this taxon
-which_cells(c("galemys pyrenaicus", "mergus merganser"))
+# Plot the point data, with a world map to provide context
+world <- map_data("world")
+ggplot(world, aes(x = long, y = lat, group = group)) +
+  # paint country border
+  geom_path(color = "gray50", alpha = 0.4) +
+  # add general styling
+  theme_raquamaps() + coord_cartesian() +
+  # zoom in to Europe
+  coord_cartesian(xlim = c(-20, 10), ylim = c(35, 50)) +
+  # add point data
+  geom_point(data = gws, aes(x = gws$decimalLongitude, y = gws$decimalLatitude, group = 0),
+             alpha = 0.1, color = "darkgreen")
 
+# We need at least 5 observations per half degree cell, 
+# and need to find those grid cells where the species is present
+r <- rasterize_presence(gws)
+loiczids <- which_cells_in_raster(r, 5)
 
-get_hcaf_species <- function(.latinname) {
-  
-  # get environmental data for only those 
-  # cells that have species present
-  
-  if (missing(.latinname)) {
-    .latinname <- "galemys pyrenaicus"
-    warning("No latin name provided, defaulting to ", .latinname)
-  }
-  presence_cells <- which_cells(.latinname)
-  res <- inner_join(hcaf, presence_cells, by = "loiczid")
-  
-  return (res)
-}
+hcaf_gws <- 
+  # use European half degree cell authority file
+  default_hcaf() %>%
+  # return only cells where there was presence
+  filter(loiczid %in% loiczids)
 
-hcaf_species <- get_hcaf_species()
-hcaf_species <- get_hcaf_species(species_list$species[1])
+# Now we know where this species is likely to be present 
+# and we determine the corresponding bioclimate variable parameter 
+# spread for the cells with known presence
 
-calc_spreads <- function(hcaf_species) {
-  
-  # calculate environmental data spreads
-  # given environmental data for a species
-  
-  spread_measures <- funs(
-    n = n(),
-    n_distinct = n_distinct(.),
-    n_NA = sum(is.na(.)),
-    min = min(., na.rm = TRUE),  
-    max = max(., na.rm = TRUE),
-    q1 = quantile(., probs = c(0.25), names = FALSE, na.rm = TRUE),  
-    q3 = quantile(., probs = c(0.75), names = FALSE, na.rm = TRUE),
-    d1 = quantile(., probs = c(0.10), names = FALSE, na.rm = TRUE),
-    d9 = quantile(., probs = c(0.90), names = FALSE, na.rm = TRUE)
-  )
-  
-  # pivot the cell data to (loiczid, Measure, value) tuples
-  tbl_df(melt(hcaf_species, id.vars = "loiczid", variable.name = "Measure")) %>%
-    # group by each bioclimate Measure and remove the cell id
-    group_by(Measure) %>% select(-loiczid) %>%
-    # apply a set of functions to each column (only numerical "value")
-    summarise_each(spread_measures) %>%
-    # add new columns with calculated range measures
-    mutate(range = max - min, iqr = q3 - q1, idr = d9 - d1) %>%
-    # round each column except the first one
-    mutate_each(funs(round), -Measure)
-}
+spread_gws <- calc_spreads(hcaf_gws)
 
-calc_spreads(hcaf_species)
+# Finally we calculate relative probabilities for presence in 
+# other cells, assuming that cells with similar "environmental envelope" 
+# is more likely to be a suitable habitat for this species 
 
-spreads <- calc_spreads(hcaf_species)
-#adj_spreads(spreads)
+hcaf_eu <- default_hcaf()
+p <- calc_probs(hcaf_eu, spread_gws)
 
-# calculate probabilities per individual bioclimate
-# variable given summary stats for a single env envelope parameter
-calc_prob <- function(x, min, max, d1, d9) {  
-  
-  if (is.na(x)) 
-    return (NA)
-  
-  if (length(x) > 1)
-    warning("calc_prob is atomic, but got x = ", x)
-  
-  if (x < -9999 || x <= min || x >= max) 
-    return (0)
-  
-  if (x == -9999 || (x >= d1 && x <= d9))
-    return (1)
-  
-  p <- NA
-  
-  if (x >= min && x < d1 && ((d1 - min) != 0)) {
-    p <- (x - min) / (d1 - min)
-  }
-  
-  if (x >= d9 && x < max && ((max -d9) != 0)) {
-    p <- (max - x) / (max - d9)
-  }
-  
-  if (between(p, 0, 1)) return (p)
-  if (p > 1) return (min(1, p))
-  if (p < 0) return (max(0, p))
-  
-  # if none of the rules matched, return NA
-  warning("Invalid data: x=", x, 
-          " min=", min, " max=", max,
-          " d1=", d1, " d9=", d9, 
-          " returning NA")
-  
-  return (NA)
-}
+# Using half degree cell grid data for the whole world
+# TODO: unfortunately we miss bioclimate variable data for the full
+# world grid, this should be added
+hdc_world <- 
+  tbl_df(get(data("aquamapsdata_Hdc_grid"))) %>%
+  mutate(loiczid = LOICZID) %>%
+  select(-LOICZID)
+rownames(hdc_world) <- hdc_world$loiczid
 
-# How can I use this and evaluate it at runtime?
-p_model <- paste(clim_vars, collapse = " * ")
+# TODO: Ask Sven K for reasonable habitat
 
-calc_probs <- function(hcaf_species, spreads) {   
-  
-  #t %>% filter(Measure == "NPP") %>% mutate(p = calc_prob(value, min, max, d1, d9))
-  res <- 
-    # pivot the cell data to (loiczid, Measure, value) tuples
-    tbl_df(melt(hcaf_species, id.vars = "loiczid", variable.name = "Measure")) %>%
-    # group by each bioclimate Measure and cell id
-    group_by(Measure, loiczid) %>% 
-    # add columns with relevant spread measures
-    left_join(spreads, by = "Measure") %>%
-    # apply a set of functions to relevant column (here "value")
-    mutate(p = calc_prob(value, min, max, d1, d9)) %>%
-    # use only resulting probabilites for all (measure, cell) tuples
-    select(Measure, loiczid, p) %>% 
-    # pivot (cast) to get probabilities in columns (wide instead of thin)
-    dcast(formula = loiczid ~ Measure, value.var = "p") %>%
-    # calculate the combined probabilities (the model) for each cell
-    mutate(
-      prod_p = Elevation * TempMonthM * NPP * SoilpH * 
-        SoilMoistu * PrecipAnMe * CTI_Max * SoilCarbon,
-      #    prod_p_vif6 = Elevation * SoilMoistu * CTI_Max * NPP * Bio5 * Bio15,
-      #    prod_p_vif9 = prod_p_vif6 * Bio8 * Bio8 * Bio18,         
-      geomprod_p = prod_p ^ (1 / length(clim_vars))
-    ) 
-  return (tbl_df(res))
-}
+```
 
-system.time(
-  p <- calc_probs(hcaf_species, spreads)
-)
+## Exporting results in raster format
 
-p
+You can now proceed to visualize this data in raster format like so:
 
-hist(p$prod_p)
+```{r}
 
-# TODO try with other species and their respective spreads
+# Put the probabilities into a raster layer
+r <- raster(ncol = 720, nrow = 360)
+r[p$loiczid] <- p$prod_p
 
-adjust_spreads <- function(spreads) {
-  
-  # Adjustment of climate summary stat values during envelope calculation
-  # landcover special case: ? TODO understand if this is needed (int values 1 .. 23)
-  # SoilpH, SoilCarbon, NPP: if -9999 reset to min of non-neg values
-  
-  # Adjustment of spread summary stats data
-  adj_data <- read.csv(header = TRUE, textConnection(
-    gsub("[ ]{3,}", "", x = 
-           "Measure, MinRange, MaxRange, ErrTol, AdjDist
-         Elevation, 0, 5669, 2, 1
-         TempMonthM, -14, 36, 1, 1 / 2
-         NPP, 6 / 1000, 1269 / 1000, NA, NA
-         SoilpH, 0, 8522 / 1000, 1, 1 / 2
-         SoilMoistu, 1 / 10, 300, 1, 1 / 2
-         CTI_Max, 293, 2423, 2, 1
-         PrecipAnMe, 0, 64019 / 100, 1, 1 / 2
-         SoilCarbon, 0, 24876 / 1000, 1, 1 / 2"
-         #"runoffannual", 0, 69, 2, 1   
-    )))
-  
-  adjustments <- 
-    tbl_df(adj_data) %>%
-    # rowwise() %>%  # if this is used then there will be no Measure column
-    group_by(Measure) %>%
-    summarise_each(funs(eval(parse(text = .))), -Measure)
-  
-  adjust_values <- function(x) {
-    
-    s <- x
-    
-    # Extreme value adjustment due to out of bounds (min, max)
-    if (s$min < s$MinRange)
-      s$min <- max(s$MinRange, s$q1 - 3 / 2 * s$iqr)
-    if (x$max > x$MaxRange)
-      s$max <- min(s$MaxRange, s$q3 + 3 / 2 * s$iqr)
-    s$range <- s$max - s$min
-    
-    # First / last decile value adjustments
-    
-    # due to low n
-    if (s$n < 10) 
-      warning("sample size of less than 10 cells not allowed!")
-    #   if (s$n >= 10 && s$n <= 13) {
-    #     s$d1 <- round((10 * s$n + 1)/100)  
-    #     s$d9 <- round((90 * s$n + 1)/100 - 2)
-    #   }
-    #   if (s$n > 13) {
-    #     s$d1 <- round((10 * s$n + 1)/100 - 1)  
-    #     s$d9 <- round((90 * s$n + 1)/100 - 1)
-    #   }
-    
-    # due to too small difference
-    if (!is.na(s$ErrTol) && s$idr < s$ErrTol) {
-      s$d1 <- idr - s$AdjDist
-      s$d9 <- idr + s$AdjDist
-    }  
-    
-    # update interdecile range
-    s$idr <- s$d9 - s$d1
-    
-    return (s)
-  }
-  
-  res <- 
-    left_join(spreads, adjustments, by = "Measure") %>%
-    group_by(Measure) %>%
-    do(adjust_values(.)) %>%
-    select(one_of(names(spreads))) %>%
-    ungroup %>% 
-    mutate_each(funs(round), -Measure)
-  
-  return(res)
-}
+# Convert raster layer data to a data frame
+# to simpligy plotting with ggplot2
+cx <- coordinates(r)[ ,1]
+cy <- coordinates(r)[ ,2]
+df <- data.frame(x = cx, y = cy, p = values(r))
 
-# trial run - do everything from start to end
+# Shows how to use Fisher-Jenks style class intervals
+# for coloring in the plot
+fisher_intervals <- classIntervals(df$p, n = 5, style = "fisher")
+p_steps <- cut(df$p, breaks = fisher_intervals$brks)
 
-adj_spreads <- adjust_spreads(spreads)
+# For now we just go with a standard five-stepped
+# sequential color scheme
+breakpoints <- c(0, 0.2, 0.4, 0.6, 0.8, 1)
+colors <- brewer.pal(5, "YlOrRd")
+p_steps <- cut(df$p, breaks = breakpoints)
 
-spreads
+# Plot raster data along with the world map
+map_gws <- 
+  ggplot(world, aes(x = long, y = lat, group = group)) +
+  # zoom in to Europe
+  coord_cartesian(xlim = c(-50, 50), ylim = c(20, 75)) +
+  # use specific styling
+  theme_bw() + theme(
+      axis.text.x = element_text(size = 10),
+      axis.text.y = element_text(size = 10),
+      panel.background = element_blank(), 
+      plot.background = element_blank(),
+      panel.grid.minor = element_line(colour = "gray95"),
+      panel.grid.major = element_line(colour = "gray95"),
+      axis.text = element_blank(),
+      axis.ticks = element_blank(),
+      axis.line = element_blank(),
+      axis.title = element_blank(),
+      panel.border = element_blank()) +  
+  # add the raster data that was converted to a data frame earlier
+  geom_raster(data = df, aes(x, y, fill = p_steps, group = NULL)) +
+  # this determines colors used, inspired by aquamaps.org
+  scale_fill_brewer(type = "seq", palette = "YlOrRd", name = "Probabilities") +
+  # outline country border with a light gray color
+  geom_path(color = "gray70", alpha = 0.4) +
+  # add grid lines to the map
+  scale_y_continuous(breaks=(-2:2) * 30) +
+  scale_x_continuous(breaks=(-4:4) * 45)
 
-# Now lets put it all together and do it for all species!
+# We now display this plot
+map_gws
 
-species_list
+# To export this map, ggsave can be used
+#ggsave(filename = "map.png", plot = map_gws, 
+#       width = 5, height = 4, units = "cm")
 
-which_cells(.latinname = species_list$species[1])
+# To export the raster data one can save the raster
+# or export the corresponding data frame to csv, like so:
+# write.csv2(tbl_df(df), file = "rasterdata.csv")
 
-# retrieve environmental data and determine spread
-# for a given species
-calc_spreads_species <- function(.latinname) {
-  hcaf_species <- get_hcaf_species(.latinname)
-  spreads_species <- calc_spreads(hcaf_species)
-  #adjust_spreads(spreads_species)
-  return (spreads_species)
-}
+```
 
-calc_spreads_species(species_list$species[1])
-calc_spreads_species(species_list$species[2])
+## Batch calculation of spreads and probabilites
 
-
-# for each species, use its cells to calculate the envelope stats
+```{r}
+# Calculate spreads for several species at once
+# dplyr style, limit calculation to top 10 species
 species_list %>% 
   filter(count > 100) %>%
+  head(10) %>%
   group_by(species) %>%
-  do(calc_spreads_species(.$species))
+  do(calc_spreads_by_species(.$species))
+
+# Create a function to wrap several steps into one
+# first calculate environmental envelope for a species
+# then calculate probabilities across European grid
 
 calc_probs_species <- function(.latinname) {
-  hcaf_species <- get_hcaf_species(.latinname)
-  spreads_species <- calc_spreads_species(.latinname)
-  tbl_df(calc_probs(hcaf_species, spreads_species))
+#  hcaf_species <- hcaf_by_species(.latinname)
+  spreads_species <- calc_spreads_by_species(.latinname)
+  hcaf_eu <- default_hcaf()
+  probs <- tbl_df(calc_probs(hcaf_eu, spreads_species))
+  return (probs)
 }
 
-a <- calc_probs_species(species_list$species[2])
+# Now we use the function above to calculate probabilities
+# for just one species
+calc_probs_species(species_list$species[2])
 
-# for each species, use its cells to calculate the probs
-species_list[2, ] %>%
+# However, we want to use the function above now 
+# to calculate probabilities for several species,
+# Here is how we do that, dplyr style, including
+# how to limit to 10 species in one batch calculation
+batch_of_ten <- 
+  species_list %>%
+  head(10) %>%
   group_by(species) %>%
   do(calc_probs_species(.$species))
 
-all_probs <- function() {
-  res <- 
-    species_list %>% 
-    # filter(count > 10) %>%
-    group_by(species) %>%
-    do(calc_probs_species(.$species))  
-  return (tbl_df(res))
-}
+```
 
-system.time(
-  p <- all_probs()
-)
+## Using world map and ggmap
 
-p
+```{r}
+# https://stackoverflow.com/questions/11201997/world-map-with-ggmap
+```
 
+## TODO: Show how to use a bayesian / monte carlo model
+
+```{r}
+```
+
+## TODO: Restrict output to areas with known presence
+
+```{r}
+```
+
+## TODO: More illustrations
+
+```{r}
+# How to merge several species into one
+# say we have two synonyms, use this technique
+# which_cells(c("galemys pyrenaicus", "mergus merganser"))
 ```

@@ -1,4 +1,12 @@
-# relevant environmental parameters
+#' Default climate variable names in raquamaps
+#' 
+#' This function returns a vector with the default relevant 
+#' environmental parameter names for demonstrational purposes
+#' @examples
+#' \dontrun{
+#'  clim_vars <- default_clim_vars()
+#' }
+#' @export
 default_clim_vars <- function() {
   c(
     "Elevation",
@@ -13,9 +21,20 @@ default_clim_vars <- function() {
   )
 }
 
+#' Default species in raquamaps
+#' 
+#' This function returns the default species latin name
+#' for demonstrational purposes
+#' 
+#' @examples
+#' \dontrun{
+#'  species <- default_species()
+#' }
+#' @export
 default_species <- function() {
   "galemys pyrenaicus"
 }
+
 
 get_am_data <- function(x) 
   tbl_df(get(data(list = x)))
@@ -29,9 +48,16 @@ ds <- c(
   "aquamapsdata_presence_occurrences"
 )
 
-# load the cell authority fields, data for half degree cells
-# including geometry and bioclimate mesurements and clean up
-
+#' Default half degree cells reference data, including
+#' geometry and bioclimate measurements, for demonstrational
+#' purposes
+#' 
+#' This function returns a data frame with reference data
+#' @examples
+#' \dontrun{
+#'  hcaf <- default_hcaf()
+#' }
+#' @export
 default_hcaf <- function(.clim_vars = default_clim_vars()) {
   
   replace_9999 <- function(x) 
@@ -41,7 +67,7 @@ default_hcaf <- function(.clim_vars = default_clim_vars()) {
     # discard irrelevant fields
     # and rename the cell identifier column name to
     # harmonize with the other datasets
-    select(loiczid = LOICZID, mget(.clim_vars)) 
+    select(loiczid = LOICZID, one_of(.clim_vars)) 
   
   hcaf %>%
     # recode values across climate variable columns 
@@ -51,7 +77,16 @@ default_hcaf <- function(.clim_vars = default_clim_vars()) {
   return (hcaf)
 }
 
-# default occurrence data for several species
+#' Default presence data for several species, for demonstrational
+#' purposes
+#' 
+#' This function returns a data frame with reference data to
+#' indicate cells with presence of species
+#' @examples
+#' \dontrun{
+#'  presence <- default_presence()
+#' }
+#' @export
 default_presence <- function() {
 
   res <- 
@@ -65,7 +100,15 @@ default_presence <- function() {
 
 }
 
-# default species list
+#' Default set of species for demonstrational purposes
+#' 
+#' This function returns a data frame with reference data suggesting 
+#' a set of species to be used in calculations
+#' @examples
+#' \dontrun{
+#'  species_list <- default_species_list()
+#' }
+#' @export
 default_species_list <- function() {
   
   res <-
@@ -77,13 +120,13 @@ default_species_list <- function() {
     summarise(count = n_distinct(loiczid)) %>%
     # order with those species at the top
     arrange(desc(count)) %>%
-    # only return species names and the counts
+    # only return the species names and the counts
     select(species = lname, count)
   
   return (res)
 }
 
-#' find all grid cells where the specified species occurs
+#' Return all grid cells identifiers where the specified species occurs
 #' @param .presence dataset with presence data for various speciess
 #' @param .latinname latin name for species
 #' @export
@@ -104,8 +147,21 @@ which_cells <- function(
   return (res)  
 }
 
-# get environmental data for only those 
-# cells that have a specific species present
+#' Default half degree cells reference data, including
+#' geometry and bioclimate measurements, for demonstrational
+#' purposes, filtered for a specific species and for specific
+#' bioclimate measurements
+#' 
+#' This function returns a data frame with reference data consisting of
+#' environmental data for only those cells that have a specific species present
+#' 
+#' @param .latinname character string with latin name for species
+#' @param .vars vector of climate variable names to use
+#' @examples
+#' \dontrun{
+#'  hcaf <- hcaf_by_species(default_species(), default_clim_vars())
+#' }
+#' @export
 hcaf_by_species <- function(
   .latinname = default_species(), 
   .vars = default_clim_vars()) {  
@@ -118,10 +174,18 @@ hcaf_by_species <- function(
   return (res)
 }
 
-# calculate environmental data spread summaries
-# given environmental data for a species
+#' Calculate environmental data spread summaries
+#' given environmental data for a species
+#' 
+#' @param .hcaf_species data frame with environmental data for one species
+
+#' @examples
+#' \dontrun{
+#'  spreads <- calc_spreads(hcaf_by_species())
+#' }
+#' @export
 calc_spreads <- function(.hcaf_species) {
-    
+
   spread_measures <- funs(
     n = n(),
     n_distinct = n_distinct(.),
@@ -149,8 +213,21 @@ calc_spreads <- function(.hcaf_species) {
   return (res)
 }
 
-# calculate probabilities per individual bioclimate
-# variable given summary stats for a single env envelope parameter
+#' Function to calculate probability per individual bioclimate
+#' variable given "spread" summary stats for a single environment 
+#' envelope parameter
+#' 
+#' @param x bioclimate parameter value
+#' @param min the min statistics for this bioclimate variable
+#' @param max the max statistics for this bioclimate variable
+#' @param d1 the first decile for for this bioclimate variable
+#' @param d9 the ninth decile for this bioclimate variable
+
+#' @examples
+#' \dontrun{
+#'  p <- calc_prob(1, 1, 1, 1)
+#' }
+#' @export
 calc_prob <- function(x, min, max, d1, d9) {  
   
   if (is.na(x)) 
@@ -188,9 +265,19 @@ calc_prob <- function(x, min, max, d1, d9) {
   return (NA)
 }
 
-# How can I use this and evaluate it at runtime?
+# TODO: How can I use this and evaluate it at runtime?
 default_model <- paste(default_clim_vars(), collapse = " * ")
 
+#' Function to calculate probabilities
+#' 
+#' @param hcaf_species data frame with half degree cell parameter values for relevant bioclimate variables
+#' @param spreads data frame with environmental envelope information (spreads for relevant bioclimate variables)
+#' 
+#' @examples
+#' \dontrun{
+#'  p <- calc_probs(hcaf_by_species(), spreads)
+#' }
+#' @export
 calc_probs <- function(hcaf_species, spreads) {   
   
   #t %>% filter(Measure == "NPP") %>% mutate(p = calc_prob(value, min, max, d1, d9))
@@ -218,7 +305,22 @@ calc_probs <- function(hcaf_species, spreads) {
   return (tbl_df(res))
 }
 
-# Adjustment of climate summary stat values during envelope calculation
+#' Adjustment of climate summary stat values during envelope 
+#' parameter calculation
+#' 
+#' This function takes a data frame with bioclimate parameter
+#' spread data and returns a similar data frame but with
+#' various adjustments for extreme values. This function works
+#' using a set of correction rules defined inline and reflecting
+#' adjustment limits as described in a separate paper (ref: Tamas Jantevik)
+#' 
+#' @param spreads data frame with spread data to adjust
+#' 
+#' @examples
+#' \dontrun{
+#'  adjusted_spreads <- adjust_spreads(spreads)
+#' }
+#' @export
 adjust_spreads <- function(spreads) {
   
   # landcover special case: ? TODO understand if this is needed (int values 1 .. 23)
@@ -293,8 +395,16 @@ adjust_spreads <- function(spreads) {
   return(res)
 }
 
-# retrieve environmental data and determine spread
-# for a given species
+#' Retrieve environmental data and determine spread
+#' for a given species, using the bundled reference data
+#' 
+#' @param .latinname character string with latin name for species
+#' 
+#' @examples
+#' \dontrun{
+#'  spread_default <- calc_spreads_by_species(default_species())
+#' }
+#' @export
 calc_spreads_by_species <- function(.latinname) {
   hs <- hcaf_by_species(.latinname)
   s <- calc_spreads(hs)
@@ -302,6 +412,16 @@ calc_spreads_by_species <- function(.latinname) {
   return (s)
 }
 
+#' Retrieve environmental, determine spread and return
+#' probabilities for a given species, using the bundled reference data
+#' 
+#' @param .latinname character string with latin name for species
+#' 
+#' @examples
+#' \dontrun{
+#'  probs_default <- calc_probs_by_species(default_species())
+#' }
+#' @export
 calc_probs_by_species <- function(.latinname) {
   hs <- hcaf_by_species(.latinname)
   s <- calc_spreads_by_species(.latinname)

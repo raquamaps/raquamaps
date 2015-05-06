@@ -16,5 +16,8 @@ Imports:
     stringr,
     foreign,
     crayon
-Suggests: knitr
+Suggests: 
+  knitr,
+  rmarkdown,
+  testthat
 VignetteBuilder: knitr

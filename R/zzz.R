@@ -19,7 +19,9 @@
     g("Welcome to ...") %+%
     b(banner) %+% 
     s(str_dup(" ", 39)) %+%
-    s("https://") %+% b("raquamaps") %+% s(".github.io")
+    s("https://") %+% b("raquamaps") %+% s(".github.io") %+%
+    g("\nNew to raquamaps? See the vignette for a tutorial...") %+%
+    g("\n(use suppressPackageStartupMessages() to silence this banner)")
 
   packageStartupMessage(styled_banner)
 }
