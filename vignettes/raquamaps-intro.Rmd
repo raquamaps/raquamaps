@@ -309,7 +309,7 @@ df <- data.frame(x = cx, y = cy, p = values(r))
 
 # Shows how to use Fisher-Jenks style class intervals
 # for coloring in the plot
-fisher_intervals <- classIntervals(df$p, n = 5, style = "fisher")
+fisher_intervals <- classInt::classIntervals(df$p, n = 5, style = "fisher")
 p_steps <- cut(df$p, breaks = fisher_intervals$brks)
 
 # For now we just go with a standard five-stepped

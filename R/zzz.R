@@ -1,26 +1,24 @@
 .onAttach <- function(libname, pkgname) {
   
-  # http://www.lemoda.net/games/figlet/figlet-instant.html
+  # http://www.asciiset.com/figletserver.html (chunky)
   
-  banner <- 
+  banner <-     
 "
-       _______                       _______                      
-.----.|   _   |.-----..--.--..---.-.|   |   |.---.-..-----..-----.
-|   _||       ||  _  ||  |  ||  _  ||       ||  _  ||  _  ||__ --|
-|__|  |___|___||__   ||_____||___._||__|_|__||___._||   __||_____|
-                  |__|                              |__|          
+.----..---.-..-----..--.--..---.-..--------..---.-..-----..-----.
+|   _||  _  ||  _  ||  |  ||  _  ||        ||  _  ||  _  ||__ --|
+|__|  |___._||__   ||_____||___._||__|__|__||___._||   __||_____|
+                |__|                               |__|          
 "
-  
+
   g <- crayon::green $ bgWhite
   b <- crayon::blue $ bgWhite
   s <- crayon::silver $ bgWhite
 
   styled_banner <- 
-    g("Welcome to ...") %+%
-    b(banner) %+% 
-    s(str_dup(" ", 39)) %+%
+    g("Welcome to ...") %+% s(str_dup(" ", 24)) %+%
     s("https://") %+% b("raquamaps") %+% s(".github.io") %+%
-    g("\nNew to raquamaps? See the vignette for a tutorial...") %+%
+    b(banner) %+% 
+    g("New to raquamaps? See the vignette for a tutorial...") %+%
     g("\n(use suppressPackageStartupMessages() to silence this banner)")
 
   packageStartupMessage(styled_banner)
