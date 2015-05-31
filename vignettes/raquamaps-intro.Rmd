@@ -100,7 +100,8 @@ clim_vars <- c(
   "CTI_Max", 
   "SoilCarbon")
 
-hcaf <- get_data("aquamaps_hcaf_eu") %>%
+hcaf <- 
+  get_data("aquamaps_hcaf_eu") %>%
   # discard irrelevant fields
   # and rename the cell identifier column name to
   # harmonize with the other datasets
@@ -243,9 +244,6 @@ Instead of using the prepackaged reference data, you will probably want to get d
 #gws <- presence_rgbif(jagged_tooth)
 #gws <- get_data("rgbif_great_white_shark")
 gws <- get_data("rgbif_galemys_pyrenaicus")
-
-# TODO: add presence dataset from gbif to package
-# to avoid problems to build if rgbif service is unavailable
 
 # Plot the point data, with a world map to provide context
 world <- map_data("world")

@@ -67,7 +67,7 @@
 #' @source \url{https://www.aquamaps.org/}
 "aquamaps_hc"
 
-#' Example grid cell data for species of a certain category with presence in a basin (approx 410 000 rows)
+#' Example grid cell data for various species of a certain category with presence in a basin (approx 410 000 rows)
 #'
 #' A dataset that should be possible to get via rgbif, would be nice to show that instead?
 #'

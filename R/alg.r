@@ -60,11 +60,12 @@ default_hcaf <- function(.clim_vars = default_clim_vars()) {
     # and rename the cell identifier column name to
     # harmonize with the other datasets
     select(loiczid = LOICZID, one_of(.clim_vars))
-  
-  hcaf %>%
+
+    # TODO: FIXME so NA values are OK throughout calcs  
+#  hcaf %>%
     # recode values across climate variable columns 
     # substitute -9999, use NA instead
-    mutate_each(funs(replace_9999), -loiczid)
+#    mutate_each(funs(replace_9999), -loiczid)
   
   return (hcaf)
 }
@@ -288,6 +289,7 @@ calc_probs <- function(hcaf_species, spreads) {
     dcast(formula = loiczid ~ Measure, value.var = "p") %>%
     # calculate the combined probabilities (the model) for each cell
     mutate(
+      # TODO: make the model here pluggable, ie use default_model()
       prod_p = Elevation * TempMonthM * NPP * SoilpH * 
         SoilMoistu * PrecipAnMe * CTI_Max * SoilCarbon,
       #    prod_p_vif6 = Elevation * SoilMoistu * CTI_Max * NPP * Bio5 * Bio15,

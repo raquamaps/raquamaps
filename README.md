@@ -5,7 +5,7 @@
 </h1>
 -->
 
-```console
+```r
 Welcome to ...                        https://raquamaps.github.io
 .----..---.-..-----..--.--..---.-..--------..---.-..-----..-----.
 |   _||  _  ||  _  ||  |  ||  _  ||        ||  _  ||  _  ||__ --|
@@ -19,13 +19,13 @@ The model uses estimates of environmental preferences with respect to depth, wat
 
 This package can be used in an IDE like `RStudio` or from an application like `QGIS` or the embedded UI can be used directly from a web browser in order to generate predicted distribution maps for marine species.
 
-It's already possible to do this, but the raquamaps package offers an open source alternative to the earlier MS Access based solution, which simplifies licensing issues and creates a solution which is easier to maintain and develop further.
+It's already possible to do this at https://aquamaps.org, but the `raquamaps` package offers an open source alternative to the earlier MS Access based solution, which simplifies licensing issues and creates a solution which is easier to integrate, maintain and develop further.
 
 ## Installing from github
 
 If you want to install the latest version of the raquamaps package from github, you can do it like so:
 
-```console
+```r
 # First make sure you have the devtools package
 # which simplifies installations from github
 # Note: Windows users have to first install Rtools to use devtools
@@ -37,10 +37,10 @@ install.packages("devtools")
 # install.packages("RCurl")
 
 library("devtools")
+install_git("https://github.com/raquamaps/raquamaps.git")
+# ... or if you have RCurl:
 install_github("raquamaps/raquamaps")  
 
-# ... or you could install without the RCurl requirement with this:
-install_git("https://github.com/raquamaps/raquamaps.git")
 ```
 
 ## Building
@@ -49,7 +49,7 @@ Open the raquamaps directory's .Rproj file in RStudio and use the Build tab to b
 
 You may need to install a few libraries for the build to go through. R libraries can be installed from within RStudio. Or you could do it at the R prompt using commands like:
 
-```console
+```r
 install.packages("RCurl")  
 ```
 

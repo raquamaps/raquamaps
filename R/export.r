@@ -22,7 +22,7 @@ presence_rgbif <- function(
   latinname = default_species(),
   maxlimit = 10000) {
   
-  message("Getting data from gbif.org can be slow... ")
+  message("Patience please, getting data from gbif.org can be slow... ")
   
   key <- name_backbone(name = latinname)
   key <- key$speciesKey
