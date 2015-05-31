@@ -9,7 +9,6 @@
 |__|  |___._||__   ||_____||___._||__|__|__||___._||   __||_____|
                 |__|                               |__|          
 "
-
   g <- crayon::green $ bgWhite
   b <- crayon::blue $ bgWhite
   s <- crayon::silver $ bgWhite
@@ -18,8 +17,10 @@
     g("Welcome to ...") %+% s(str_dup(" ", 24)) %+%
     s("https://") %+% b("raquamaps") %+% s(".github.io") %+%
     b(banner) %+% 
-    g("New to raquamaps? See the vignette for a tutorial...") %+%
-    g("\n(use suppressPackageStartupMessages() to silence this banner)")
-
-  packageStartupMessage(styled_banner)
+    g("New to raquamaps? See the vignette for a tutorial...") %+% 
+    g(str_dup(" ", 9)) %+%
+    g("\n(use suppressPackageStartupMessages() to silence this banner)") %+%
+    g(str_dup(" ", 4))
+    
+  suppressWarnings(packageStartupMessage(styled_banner))
 }

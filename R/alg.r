@@ -1,4 +1,7 @@
-#' Default climate variable names in raquamaps
+get_data <- function(x) 
+  tbl_df(get(data(list = x)))
+
+#' Default bioclimate variable names in raquamaps
 #' 
 #' This function returns a vector with the default relevant 
 #' environmental parameter names for demonstrational purposes
@@ -19,6 +22,7 @@ default_clim_vars <- function() {
     "SoilCarbon"
     #  "annual runoff"?
   )
+  
 }
 
 #' Default species in raquamaps
@@ -35,19 +39,6 @@ default_species <- function() {
   "galemys pyrenaicus"
 }
 
-
-get_am_data <- function(x) 
-  tbl_df(get(data(list = x)))
-
-ds <- c(
-  # half degree cell authority files
-  "aquamapsdata_HCAF_EU_Grid_WGS84", 
-  # presence data for one species
-  "aquamapsdata_GoodCelles_galemys_pyrenaicus_WGS84",  
-  # presence data for several species
-  "aquamapsdata_presence_occurrences"
-)
-
 #' Default half degree cells reference data, including
 #' geometry and bioclimate measurements, for demonstrational
 #' purposes
@@ -63,11 +54,12 @@ default_hcaf <- function(.clim_vars = default_clim_vars()) {
   replace_9999 <- function(x) 
     ifelse(round(x) == -9999, NA, x)
 
-  hcaf <- get_am_data(ds[1]) %>%
+  hcaf <- 
+    get_data("aquamaps_hcaf_eu") %>%
     # discard irrelevant fields
     # and rename the cell identifier column name to
     # harmonize with the other datasets
-    select(loiczid = LOICZID, one_of(.clim_vars)) 
+    select(loiczid = LOICZID, one_of(.clim_vars))
   
   hcaf %>%
     # recode values across climate variable columns 
@@ -90,7 +82,7 @@ default_hcaf <- function(.clim_vars = default_clim_vars()) {
 default_presence <- function() {
 
   res <- 
-    get_am_data(ds[3]) %>%
+    get_data("aquamaps_presence_occurrences") %>%
     # use boolean instead of text to indicate presence
     mutate(occurrence = (occurrence == "t")) %>%
     # clean up input data - discard irrelevant fields

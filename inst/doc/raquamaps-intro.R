@@ -1,36 +1,4 @@
----
-Title: "raquamaps"
-author: "Markus Skyttner"
-date: "`r Sys.Date()`"
-output:
-  html_document:
-    theme: cosmo
-    highlight: textmate
----
-<!--
-%\VignetteEngine{knitr::rmarkdown}
-%\VignetteIndexEntry{raquamaps}
-  \usepackage[utf8]{inputenc}
--->
-
-<!--
-theme specifies the Bootstrap theme to use for the page (themes are drawn from the Bootswatch theme library). Valid themes include "default", "cerulean", "journal", "flatly", "readable", "spacelab", "united", and "cosmo". Pass null for no theme (in this case you can use the css parameter to add your own styles).
-
-highlight specifies the syntax highlighting style. Supported styles include "default", "tango", "pygments", "kate", "monochrome", "espresso", "zenburn", "haddock", and "textmate". Pass null to prevent syntax highlighting.
--->
-
-# Using raquamaps
-
-This vignette is a long form documentation included in the raquamaps R package with the intention to describe some common usage scenarios, for example:
-
-- For a given species, calculate and generate a distribution map and output in csv format
-- For a list of species, generate several maps and output in raster format
-
-## Some useful packages to use with raquamaps
-
-First some recommended R packages that are useful when working with `raquamaps`, in order to facilitate plotting, data manipulation and data retrieval:
-
-```{r, echo=TRUE, message=FALSE, warning=FALSE}
+## ---- echo=TRUE, message=FALSE, warning=FALSE----------------------------
 
 # plotting
 require("classInt")
@@ -52,15 +20,8 @@ require("raquamaps")
 # throughout this tutorial
 options(stringsAsFactors = FALSE)
 
-```
 
-## How to access and use the bundled reference data
-
-This package comes with some bundled reference data that can be used for demonstrational purposes and in off-line situations. For real use cases, it is recommended to use on-line services or tools for getting up-to-date reference data, such as the rgbif R package. How to get data from rgbif for use in raquamaps will be covered later in this tutorial.
-
-Before showing some convenience functions that simplify accessing reference data, here is how you can access bundled reference datasets directly:
-
-```{r}
+## ------------------------------------------------------------------------
 
 # Inspect documentation for reference datasets
 # that are bundled into the package with this ...
@@ -118,11 +79,8 @@ hcaf_eu <-
   mutate_each(funs(replace_9999), -loiczid)
 
 hcaf_eu
-```
 
-There are some convenient helper functions that simplifies access and provides some relevant defaults for use with the demonstrational reference data that is bundled in the package:
-
-```{r}
+## ------------------------------------------------------------------------
 # Suggested set of bioclimate variables
 clim_vars <- default_clim_vars()
 
@@ -177,13 +135,8 @@ presence_occs %>%
   arrange(desc(count)) %>%
   select(species = lname, count)
 
-```
 
-## Typical workflow
-
-Now that we can retrieve presence data for one species using the bundled reference data, we can show the workflow for calculating the environmental envelope or spread values.
-
-```{r}
+## ------------------------------------------------------------------------
 # We find bioclimate variable data from half degree cells
 # where a specific species has been present
 hcaf_galemys <- hcaf_by_species("galemys pyrenaicus")
@@ -195,11 +148,8 @@ spreads_galemys <- calc_spreads(hcaf_galemys)
 # We can also use this wrapper function for convenience
 calc_spreads_by_species("galemys pyrenaicus")
 
-```
 
-Now, across various other half degree grid cells, where we have similar bioclimate variable information available, we can calculate relative probabilites for presence, assuming that similar spreads in the species' environmental bioclimate variables would indicate a suitable habitat:
-
-```{r}
+## ------------------------------------------------------------------------
 # Calculate probabilites across European grid cells, 
 # given this particular species preference for environmental envelopes
 hcaf_eu <- default_hcaf()
@@ -230,13 +180,8 @@ theme_raquamaps <- function() {
 ggplot(probs, aes(x = probs$p)) + theme_raquamaps() +
   geom_bar(fill = "darkgreen", colour = "darkgray")
 
-```
 
-## Using presence data from gbif
-
-Instead of using the prepackaged reference data, you will probably want to get data from GBIF. Here is an illustration of how to do this conveniently by using the rgbif R package:
-
-```{r, echo=TRUE}
+## ---- echo=TRUE----------------------------------------------------------
 
 # Get presence data for Great White Shark from rgbif
 # jagged_tooth <- "Carcharodon carcharias"
@@ -297,13 +242,8 @@ rownames(hdc_world) <- hdc_world$loiczid
 
 # TODO: Ask Sven K for reasonable habitat
 
-```
 
-## Exporting results in raster format
-
-You can now proceed to visualize this data in raster format like so:
-
-```{r}
+## ------------------------------------------------------------------------
 
 # Put the probabilities into a raster layer
 r <- raster(ncol = 720, nrow = 360)
@@ -365,11 +305,8 @@ map_gws
 # or export the corresponding data frame to csv, like so:
 # write.csv2(tbl_df(df), file = "rasterdata.csv")
 
-```
 
-## Batch calculation of spreads and probabilites
-
-```{r}
+## ------------------------------------------------------------------------
 # Calculate spreads for several species at once
 # dplyr style, limit calculation to top 10 species
 species_list %>% 
@@ -404,28 +341,16 @@ batch_of_ten <-
   group_by(species) %>%
   do(calc_probs_species(.$species))
 
-```
 
-## Using world map and ggmap
-
-```{r}
+## ------------------------------------------------------------------------
 # https://stackoverflow.com/questions/11201997/world-map-with-ggmap
-```
 
-## TODO: Show how to use a bayesian / monte carlo model
+## ------------------------------------------------------------------------
 
-```{r}
-```
+## ------------------------------------------------------------------------
 
-## TODO: Restrict output to areas with known presence
-
-```{r}
-```
-
-## TODO: More illustrations
-
-```{r}
+## ------------------------------------------------------------------------
 # How to merge several species into one
 # say we have two synonyms, use this technique
 # which_cells(c("galemys pyrenaicus", "mergus merganser"))
-```
+

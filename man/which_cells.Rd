@@ -2,7 +2,7 @@
 % Please edit documentation in R/alg.r
 \name{which_cells}
 \alias{which_cells}
-\title{find all grid cells where the specified species occurs}
+\title{Return all grid cells identifiers where the specified species occurs}
 \usage{
 which_cells(.presence = default_presence(), .latinname = default_species())
 }
@@ -12,6 +12,6 @@ which_cells(.presence = default_presence(), .latinname = default_species())
 \item{.latinname}{latin name for species}
 }
 \description{
-find all grid cells where the specified species occurs
+Return all grid cells identifiers where the specified species occurs
 }
 

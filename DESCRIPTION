@@ -2,7 +2,7 @@ Package: raquamaps
 Encoding: UTF-8
 Type: Package
 Title: This package implements Aqua Maps using R
-Version: 0.4.0
+Version: 0.4.1
 Date: 2014-12-15
 Author: Onésimme Prud'homme, Markus Skyttner
 Maintainer: Markus Skyttner <markus.skyttner@nrm.se>
@@ -21,3 +21,4 @@ Suggests:
   rmarkdown,
   testthat
 VignetteBuilder: knitr
+LazyData: true

@@ -10,7 +10,6 @@
 #'\dontrun{
 #' get_dropbox_as_zip("7yzcbdgm5m9axht/PUnf7vugFc", "/tmp")
 #'}
-#' @export
 get_dropbox_as_zip <- function(pubshare, destdir = getwd()) {
 
   # TODO change to use httr instead
