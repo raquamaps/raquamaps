@@ -3,7 +3,7 @@
 \docType{data}
 \name{aquamaps_presence_basins}
 \alias{aquamaps_presence_basins}
-\title{Example grid cell data for species of a certain category with presence in a basin (approx 410 000 rows)}
+\title{Example grid cell data for various species of a certain category with presence in a basin (approx 410 000 rows)}
 \format{A data frame [410,288 x 5]
 \describe{
   \item{loiczid}{loiczid is the unique cell identifier}
