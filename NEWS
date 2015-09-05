@@ -1,0 +1,12 @@
+NEWS
+====
+
+For more fine-grained list of changes or to report a bug, consult 
+
+* [The issues log](https://github.com/raquamaps/raquamaps/issues)
+* [The commit log](https://github.com/raquamaps/raquamaps/commits/master)
+
+v0.4.2
+------
+
+Updated README, DESCRIPTION and various other project specific files to comply with the style used in the ropensci/rfishbase package. Also added raw data from Kathy on FAO areas and the quarter degree cell grid. Also started to prepare for Travis CI by adding .travis.yml.
