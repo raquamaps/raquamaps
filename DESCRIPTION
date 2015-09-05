@@ -2,23 +2,30 @@ Package: raquamaps
 Encoding: UTF-8
 Type: Package
 Title: This package implements Aqua Maps using R
-Version: 0.4.1
-Date: 2014-12-15
-Author: Onésimme Prud'homme, Markus Skyttner
-Maintainer: Markus Skyttner <markus.skyttner@nrm.se>
-Description: This package is a programmatic interface to Aquamaps.org
+Version: 0.4.2
 License: AGPL
+Date: 2014-12-15
+Authors@R: person("Markus", "Skyttner", role = c("cre", "aut"), email = "markus.skyttner@nrm.se")
+URL: https://github.com/raquamaps/raquamaps
+BugReports: https://github.com/raquamaps/raquamaps/issues
+Description: This package is a programmatic interface to Aquamaps.org
+LazyData: true
+Depends: 
+    R (>= 3.0)
 Imports: 
+    dplyr (>= 0.4.0),
+    httr (>= 1.0.0),
+    methods,
+    utils,
     raster,
     rgbif,
-    dplyr,
     reshape2,
     stringr,
     foreign,
     crayon
 Suggests: 
+  devtools,
+  testthat,
   knitr,
-  rmarkdown,
-  testthat
+  rmarkdown
 VignetteBuilder: knitr
-LazyData: true

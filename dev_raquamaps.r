@@ -81,7 +81,7 @@ saveRDS(hcaf, "data/hcaf.rds")
 # getting sqlite3 data from converted mdb into a data frame
 library("dplyr")
 devtools::use_data_raw()
-# data-raw contains to shell scripts that a) download the
+# data-raw contains the shell scripts that a) download the
 # full hcaf data from dropbox b) converts to sqlite3 db format
 # after which the following reads the data and stores it in the pkg
 refdata <- src_sqlite("data-raw/hcaf.db")
@@ -123,11 +123,11 @@ gen_dox_dataset_rows <- function(cols) {
   res <- sapply(cols, function(x) gsub("__COL__", x, template))
   out <- paste0(collapse = "\n", res)
   message("Paste this into your dataset dox")
-  message("in data/aquamaps_refdata.r")
+  message("in R/refdata.r")
   message(out)
 }
 
-# Generete dox for dataset cols to paste into data/aquamaps_refdata.r
+# Generete dox for dataset cols to paste into R/refdata.r
 gen_dox_dataset_rows(names(aquamaps_hcaf_world))
 # Save dataset into R package distro
 use_data(internal = FALSE, aquamaps_hcaf_world, overwrite = TRUE)
@@ -234,4 +234,32 @@ ds <- c(
 )
 
 
+
+
+# Adding quarter degree cell data
+
+# getting sqlite3 data from converted mdb into a data frame
+library("dplyr")
+refdata <- src_sqlite("data-raw/qcaf.db")
+refdata
+#src_tbls(refdata)
+aquamaps_qc <- 
+  collect(tbl(refdata, "QuarterDegreeCells"))
+
+gen_dox_dataset_rows <- function(cols) {
+  template <- "#'   \\item{__COL__}{__COL__}"
+  res <- sapply(cols, function(x) gsub("__COL__", x, template))
+  out <- paste0(collapse = "\n", res)
+  message("Paste this into your dataset dox")
+  message("in data/aquamaps_refdata.r")
+  message(out)
+}
+
+# Generete dox for dataset cols to paste into R/refdata.r
+gen_dox_dataset_rows(names(aquamaps_qc))
+# Save dataset into R package distro
+library(devtools)-
+use_data(internal = FALSE, aquamaps_qc, overwrite = TRUE)
+
+# Now consider how to load FAO data and connect it to grids
 

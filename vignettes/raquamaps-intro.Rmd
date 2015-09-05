@@ -216,6 +216,20 @@ hcaf_eu <- default_hcaf()
 # the spread or environmental envelope preference
 probs <- calc_probs(hcaf_eu, spreads_galemys)
 
+# TODO: Calculate across whole world
+# hcaf_world <- 
+#   get_data("aquamaps_hcaf_world") %>%
+#   rename(loiczid = LOICZID) %>% 
+#   select(loiczid, one_of(clim_vars))
+# x <- as.numeric(hcaf_world$CTI_Max)
+# x[is.na(x)] <- -9999
+# x[x == ""] <- -9999
+# hcaf_world$CTI_Max <- x
+# hcaf_world$NPP <- runif(nrow(hcaf_world), min = 0, max = 1)
+# system.time(
+#   probs <- calc_probs(hcaf_world, spreads_galemys)
+# )
+
 # Define custom plot style to use in ggplot2 plots
 theme_raquamaps <- function() {
   theme <- theme_bw() + theme(

@@ -145,3 +145,34 @@
 #' }
 #' @source \url{https://www.aquamaps.org/}
 "rgbif_great_white_shark"
+
+#' Quarter degree cell metadata (only identifiers and coordinates)
+#'
+#' A dataset containing metadata such as identifiers and bbox coords  
+#'
+#' @format A data frame
+#' \describe{
+
+#'   \item{OBJECTID}{OBJECTID}
+#'   \item{Quadrant}{Quadrant}
+#'   \item{Global_Quadrant}{Global_Quadrant}
+#'   \item{c_square_code}{c_square_code}
+#'   \item{N_limit}{N_limit}
+#'   \item{E_limit}{E_limit}
+#'   \item{S_limit}{S_limit}
+#'   \item{W_limit}{W_limit}
+#'   \item{area__km2_}{area__km2_}
+#'   \item{centrelatitude}{centrelatitude}
+#'   \item{centrelongitude}{centrelongitude}
+#'   \item{Northern}{Northern}
+#'   \item{Southern}{Southern}
+#'   \item{Eastern}{Eastern}
+#'   \item{Western}{Western}
+#'   \item{Area}{Area}
+#'   \item{CenterLat}{CenterLat}
+#'   \item{CenterLon}{CenterLon}
+#'   \item{Shape}{Shape}
+#'   ...
+#' }
+#' @source \url{https://www.aquamaps.org/}
+"aquamaps_qc"

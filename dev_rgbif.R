@@ -59,7 +59,7 @@ export_probs_as_raster <- function(.latinnames) {
   # the numbering steps one cell south 
   # along the -180 meridian and continues sequentially west to east.
   
-  r <- raster(ncol = 720, nrow = 360)
+  r <- raster(ncol = 720*2, nrow = 360*2)
   # res(r)
   # ncell(r)
   #loiczids <- goodcellz[species][[1]]$loiczid
