@@ -1,6 +1,7 @@
 # Sample .travis.yml for R projects
 
 language: r
+sudo: required
 warnings_are_errors: true
 
 notifications:
@@ -13,8 +14,8 @@ r_apt_packages:
   - knitr
   - dplyr
 
-r_github_packages:
-  - jimhester/covr
+#r_github_packages:
+#  - jimhester/covr
 
-after_success:
-  - Rscript -e 'library(covr); coveralls()'
+#after_success:
+#  - Rscript -e 'library(covr); coveralls()'
