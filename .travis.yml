@@ -21,8 +21,22 @@ r_apt_packages:
   - knitr
   - dplyr
 
+r_packages:
+  - classInt
+  - maps
+
 #r_github_packages:
 #  - jimhester/covr
 
 #after_success:
 #  - Rscript -e 'library(covr); coveralls()'
+
+
+require("ggplot2")
+require("raster")
+require("RColorBrewer")
+
+# data manipulation
+require("plyr")
+require("dplyr")
+require("reshape2")

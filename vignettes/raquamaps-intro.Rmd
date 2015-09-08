@@ -39,7 +39,7 @@ require("raster")
 require("RColorBrewer")
 
 # data manipulation
-require("plyr")
+#require("plyr")
 require("dplyr")
 require("reshape2")
 
