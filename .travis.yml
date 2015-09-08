@@ -24,6 +24,7 @@ r_apt_packages:
 r_packages:
   - classInt
   - maps
+  - RColorBrewer
 
 #r_github_packages:
 #  - jimhester/covr
@@ -31,12 +32,5 @@ r_packages:
 #after_success:
 #  - Rscript -e 'library(covr); coveralls()'
 
-
-require("ggplot2")
-require("raster")
-require("RColorBrewer")
-
-# data manipulation
-require("plyr")
-require("dplyr")
-require("reshape2")
+# ggplot2
+# raster
