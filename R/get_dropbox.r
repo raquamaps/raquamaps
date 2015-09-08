@@ -13,8 +13,8 @@
 get_dropbox_as_zip <- function(pubshare, destdir = getwd()) {
 
   # TODO change to use httr instead
-  require("RCurl")
-  require("stringr")
+  requireNamespace("RCurl", quietly = FALSE)
+  requireNamespace("stringr", quietly = FALSE)
     
   url <- paste0("https://www.dropbox.com/sh/", pubshare)
   htm <- RCurl::getURL(url, ssl.verifypeer = FALSE)

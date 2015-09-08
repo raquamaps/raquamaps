@@ -9,7 +9,10 @@ warnings_are_errors: true
 #    on_success: change
 #    on_failure: change
 
-# System dependencies for HTTP calling
+before_install:
+  - sudo apt-get update -qq
+  - sudo apt-get install -y libv8-dev
+  
 apt_packages:
   - libv8-dev
 
