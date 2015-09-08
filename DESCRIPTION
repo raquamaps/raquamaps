@@ -13,6 +13,7 @@ LazyData: true
 Depends: 
     R (>= 3.0)
 Imports: 
+    stringr,
     dplyr (>= 0.4.0),
     httr (>= 1.0.0),
     methods,
@@ -20,7 +21,6 @@ Imports:
     raster,
     rgbif,
     reshape2,
-    stringr,
     foreign,
     crayon
 Suggests: 
