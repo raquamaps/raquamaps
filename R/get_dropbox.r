@@ -6,8 +6,8 @@
 #' @param pubshare a string with the dropbox public share, 
 #' for example "u4ipvf1tfo4izhq/AACVIxriWFkMfoliMtIyRUDPa"
 #' @param destfile path for downloaded content, defaults to tempfile()
-#' @examples
 #' @return path to local file with the downloaded content
+#' @examples
 #'\dontrun{
 #' get_dropbox_file("u4ipvf1tfo4izhq/AACVIxriWFkMfoliMtIyRUDPa", "/tmp/test.zip")
 #'}
