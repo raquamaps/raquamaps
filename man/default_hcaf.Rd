@@ -8,6 +8,9 @@ purposes}
 \usage{
 default_hcaf(.clim_vars = default_clim_vars())
 }
+\arguments{
+\item{.clim_vars}{vector of bioclimate variables to use}
+}
 \description{
 This function returns a data frame with reference data
 }

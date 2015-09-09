@@ -44,6 +44,7 @@ default_species <- function() {
 #' purposes
 #' 
 #' This function returns a data frame with reference data
+#' @param .clim_vars vector of bioclimate variables to use
 #' @examples
 #' \dontrun{
 #'  hcaf <- default_hcaf()
