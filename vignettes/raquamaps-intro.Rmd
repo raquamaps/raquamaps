@@ -418,6 +418,28 @@ batch_of_ten <-
 
 ```
 
+## Getting native range maps data from aquamaps.org
+
+```{r}
+# Get the authoritative native range map for cod
+# from aquamaps.org as a data frame
+atlantic_cod <- nativerange("Gadus morhua")
+print(atlantic_cod)
+
+black_cod <- nativerange("Anoplopoma fimbria")
+print(black_cod)
+
+# Get native range map data from several species 
+# of cod and combine into one dataframe
+my_latinnames <- c("Anoplopoma fimbria", "Gadus morhua")
+native_range_maps <- lapply(my_latinnames, nativerange)
+combined <- rbind_all(native_range_maps)
+print(combined)
+
+# TODO - nice maps for the above datasets
+```
+
+
 ## Using world map and ggmap
 
 ```{r}

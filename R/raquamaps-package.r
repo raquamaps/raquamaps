@@ -25,8 +25,6 @@
 #'  Kaschner K and Froese R (in preparation) Predicting freshwater-dependent 
 #'  species distributions in Europe
 #' @name raquamaps
-#' @import dplyr 
-#' @import reshape2 
-#' @import crayon
+#' @import dplyr reshape2 crayon httr
 #' @docType package
 NULL

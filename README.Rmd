@@ -9,8 +9,9 @@ output:
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-<!-- TODO: set up build to happen with travis-ci.org
-[![Build Status](https://travis-ci.org/raquamaps/raquamaps.svg?branch=raquamaps)](https://travis-ci.org/raquamaps)  [![Coverage Status](https://coveralls.io/repos/raquamaps/raquamaps/badge.svg?branch=raquamaps)](https://coveralls.io/r/raquamaps/raquamaps.svg?branch=raquamaps)
+[![Build Status](https://travis-ci.org/raquamaps/raquamaps.svg?branch=master)](https://travis-ci.org/raquamaps/raquamaps)
+<!--
+[![Coverage Status](https://coveralls.io/repos/raquamaps/raquamaps/badge.svg?branch=raquamaps)](https://coveralls.io/r/raquamaps/raquamaps.svg?branch=raquamaps)
 [![Downloads](http://cranlogs.r-pkg.org/badges/raquamaps](https://github.com/metacran/cranlogs.app)
 -->
 
