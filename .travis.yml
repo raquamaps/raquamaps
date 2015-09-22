@@ -11,7 +11,7 @@ warnings_are_errors: true
 
 before_install:
   - sudo apt-get update -qq
-  - sudo apt-get install -y libv8-dev libgeos-dev libgdal1-dev libproj-dev libcurl4-openssl-dev libxml2-dev
+  - sudo apt-get install -y libv8-dev libgdal-dev libgdal1-dev libproj-dev libcurl4-openssl-dev libxml2-dev
   
 apt_packages:
   - libv8-dev
