@@ -10,18 +10,18 @@ warnings_are_errors: true
 #    on_failure: change
 
 before_install:
+  - sudo add-apt-repository -y ppa:marutter/c2d4u
   - sudo apt-get update -qq
-  - sudo apt-get install -y libv8-dev libgdal-dev libgdal1-dev libproj-dev libcurl4-openssl-dev libxml2-dev
+  - sudo apt-get install -y libv8-dev
+  - sudo apt-get install -y r-cran-rgdal
   
 apt_packages:
   - libv8-dev
 
-r_apt_packages:
+r_binary_packages:
   - testthat
   - knitr
   - dplyr
-
-r_packages:
   - classInt
   - maps
   - RColorBrewer
