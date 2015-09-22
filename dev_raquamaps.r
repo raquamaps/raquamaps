@@ -263,3 +263,36 @@ use_data(internal = FALSE, aquamaps_qc, overwrite = TRUE)
 
 # Now consider how to load FAO data and connect it to grids
 
+
+
+
+
+# Adding aquamaps.org curated occurrence data
+
+# getting sqlite3 data from converted mdb into a data frame
+library("dplyr")
+#refdata <- src_sqlite("data-raw/occ/AquaMaps_Proc_OccCells.db")
+refdata <- src_sqlite("data-raw/occ/PointDataAssembly_FB.db")
+refdata
+#src_tbls(refdata)
+aquamaps_pointassembly_gbif_species <- collect(tbl(refdata, from = "GBIFSpecies"))
+aquamaps_pointassembly_obis_species <- collect(tbl(refdata, from = "OBISSpecies"))
+
+gen_dox_dataset_rows <- function(cols) {
+  template <- "#'   \\item{__COL__}{__COL__}"
+  res <- sapply(cols, function(x) gsub("__COL__", x, template))
+  out <- paste0(collapse = "\n", res)
+  message("Paste this into your dataset dox")
+  message("in data/aquamaps_refdata.r")
+  message(out)
+}
+
+# Generete dox for dataset cols to paste into R/refdata.r
+gen_dox_dataset_rows(names(aquamaps_good))
+# Save dataset into R package distro
+library(devtools)-
+  use_data(internal = FALSE, aquamaps_qc, overwrite = TRUE)
+
+# Now consider how to load FAO data and connect it to grids
+
+

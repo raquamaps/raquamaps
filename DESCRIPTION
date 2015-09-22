@@ -1,10 +1,10 @@
 Package: raquamaps
 Encoding: UTF-8
 Type: Package
-Title: This package implements Aqua Maps using R
-Version: 0.4.2
+Title: Aqua Maps Implemented Using R
+Version: 0.4.3
 License: AGPL
-Date: 2014-12-15
+Date: 2015-09-16
 Authors@R: person("Markus", "Skyttner", role = c("cre", "aut"), email = "markus.skyttner@nrm.se")
 URL: https://github.com/raquamaps/raquamaps
 BugReports: https://github.com/raquamaps/raquamaps/issues
@@ -22,7 +22,9 @@ Imports:
     rgbif,
     reshape2,
     foreign,
-    crayon
+    crayon,
+    leaflet,
+    sp
 Suggests: 
   devtools,
   testthat,

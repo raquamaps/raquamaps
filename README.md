@@ -1,9 +1,13 @@
-<!-- README.md is generated from README.Rmd. Please edit that file -->
-[![Build Status](https://travis-ci.org/raquamaps/raquamaps.svg?branch=master)](https://travis-ci.org/raquamaps/raquamaps) <!--
-[![Coverage Status](https://coveralls.io/repos/raquamaps/raquamaps/badge.svg?branch=raquamaps)](https://coveralls.io/r/raquamaps/raquamaps.svg?branch=raquamaps)
-[![Downloads](http://cranlogs.r-pkg.org/badges/raquamaps](https://github.com/metacran/cranlogs.app)
--->
+[![Build Status](https://travis-ci.org/raquamaps/raquamaps.svg?branch=master)](https://travis-ci.org/raquamaps/raquamaps)
 
+<!--
+
+[![Coverage Status](https://coveralls.io/repos/raquamaps/raquamaps/badge.svg?branch=raquamaps)](https://coveralls.io/r/raquamaps/raquamaps.svg?branch=raquamaps)  
+
+[![Downloads](http://cranlogs.r-pkg.org/badges/raquamaps](https://github.com/metacran/cranlogs.app)
+
+-->
+<!-- README.md is generated from README.Rmd. Please edit that file -->
 ``` console
 Welcome to ...                        https://raquamaps.github.io
 .----..---.-..-----..--.--..---.-..--------..---.-..-----..-----.

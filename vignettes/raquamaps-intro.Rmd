@@ -4,8 +4,8 @@ author: "Markus Skyttner"
 date: "`r Sys.Date()`"
 output:
   html_document:
-    theme: cosmo
-    highlight: textmate
+    theme: spacelab
+    highlight: default
 ---
 <!--
 %\VignetteEngine{knitr::rmarkdown}
@@ -38,14 +38,14 @@ require("ggplot2")
 require("raster")
 require("RColorBrewer")
 
+# data modelling
+#require("rgbif")
+require("raquamaps")
+
 # data manipulation
 #require("plyr")
 require("dplyr")
 require("reshape2")
-
-# data modelling
-require("rgbif")
-require("raquamaps")
 
 # we set our preference for how 
 # we choose to interpret string data 
@@ -420,12 +420,13 @@ batch_of_ten <-
 
 ## Getting native range maps data from aquamaps.org
 
-```{r}
+Due to curl requests for aquamaps.org timeing out on the travis-ci.org for the automatic build, the R code below is not executed when building this vignette.
+
+```console
 # Get the authoritative native range map for cod
 # from aquamaps.org as a data frame
 atlantic_cod <- nativerange("Gadus morhua")
 print(atlantic_cod)
-
 black_cod <- nativerange("Anoplopoma fimbria")
 print(black_cod)
 
@@ -439,24 +440,12 @@ print(combined)
 # TODO - nice maps for the above datasets
 ```
 
-
-## Using world map and ggmap
-
-```{r}
-# https://stackoverflow.com/questions/11201997/world-map-with-ggmap
-```
-
-## TODO: Show how to use a bayesian / monte carlo model
+## TODO: Restrict output certain areas
 
 ```{r}
 ```
 
-## TODO: Restrict output to areas with known presence
-
-```{r}
-```
-
-## TODO: More illustrations
+## TODO: More illustrations of various common use cases
 
 ```{r}
 # How to merge several species into one
