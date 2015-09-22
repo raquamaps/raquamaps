@@ -9,6 +9,8 @@ stepped_raster(r, n = 5, interval_style = "fisher")
 \arguments{
 \item{r}{raster}
 
+\item{n}{number of steps to use, default being five steps}
+
 \item{interval_style}{a character string with classInt interval
 styles, defaulting to "fisher", but can be "quantile", "equal"
 (see classIntervals docs)}

@@ -24,7 +24,10 @@ Imports:
     foreign,
     crayon,
     leaflet,
-    sp
+    sp,
+    classInt,
+    ggplot2,
+    RColorBrewer
 Suggests: 
   devtools,
   testthat,

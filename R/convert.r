@@ -62,6 +62,7 @@ which_cells_in_raster <- function(r, lower_limit = 0) {
 
 #' Discretize a raster into intervals or steps for chloropeth maps
 #' @param r raster
+#' @param n number of steps to use, default being five steps
 #' @param interval_style a character string with classInt interval
 #' styles, defaulting to "fisher", but can be "quantile", "equal" 
 #' (see classIntervals docs)
