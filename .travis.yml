@@ -25,6 +25,7 @@ r_packages:
   - classInt
   - maps
   - RColorBrewer
+  - ggmap
 
 #r_github_packages:
 #  - jimhester/covr

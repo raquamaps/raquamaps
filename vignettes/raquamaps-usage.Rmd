@@ -35,6 +35,7 @@ require("dplyr")
 require("raster")
 require("sp")
 require("raquamaps")
+require("ggmap")
 
 # helper to load data from the package
 get_data <- function(x) tbl_df(get(data(list = x)))
