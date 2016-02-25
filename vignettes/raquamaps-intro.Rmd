@@ -260,7 +260,7 @@ Instead of using the prepackaged reference data, you will probably want to get d
 gws <- get_data("rgbif_galemys_pyrenaicus")
 
 # Plot the point data, with a world map to provide context
-world <- map_data("world")
+world <- ggplot2::map_data("world")
 ggplot(world, aes(x = long, y = lat, group = group)) +
   # paint country border
   geom_path(color = "gray50", alpha = 0.4) +
