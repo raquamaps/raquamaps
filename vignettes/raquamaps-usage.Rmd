@@ -6,12 +6,12 @@ output:
   html_document:
     theme: spacelab
     highlight: default
+vignette: >
+  %\VignetteIndexEntry{raquamaps-examples}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+  \usepackage[utf8]{inputenc}        
 ---
-<!--
-%\VignetteEngine{knitr::rmarkdown}
-%\VignetteIndexEntry{raquamaps-examples}
-  \usepackage[utf8]{inputenc}
--->
 
 <!--
 theme specifies the Bootstrap theme to use for the page (themes are drawn from the Bootswatch theme library). Valid themes include "default", "cerulean", "journal", "flatly", "readable", "spacelab", "united", and "cosmo". Pass null for no theme (in this case you can use the css parameter to add your own styles).

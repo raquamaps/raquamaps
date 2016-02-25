@@ -6,12 +6,12 @@ output:
   html_document:
     theme: spacelab
     highlight: default
+vignette: >
+  %\VignetteIndexEntry{raquamaps-overview}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+  \usepackage[utf8]{inputenc}    
 ---
-<!--
-%\VignetteEngine{knitr::rmarkdown}
-%\VignetteIndexEntry{raquamaps-overview}
-  \usepackage[utf8]{inputenc}
--->
 
 # 2.a Aim of the AquaMaps algorithm
 

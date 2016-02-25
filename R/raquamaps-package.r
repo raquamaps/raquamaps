@@ -24,7 +24,10 @@
 #' @references Östergren J, Kullander S O, Prud'homme O, Reyes K K, 
 #'  Kaschner K and Froese R (in preparation) Predicting freshwater-dependent 
 #'  species distributions in Europe
-#' @name raquamaps
-#' @import dplyr reshape2 crayon httr tidyr
+#' @name raquamaps-package
+#' @aliases raquamaps
+#' @keywords package
+#' @examples #see functions.
 #' @docType package
+#' @import dplyr reshape2 crayon httr tidyr
 NULL

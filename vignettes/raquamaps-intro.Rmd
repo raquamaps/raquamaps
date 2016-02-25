@@ -6,12 +6,12 @@ output:
   html_document:
     theme: spacelab
     highlight: default
----
-<!--
-%\VignetteEngine{knitr::rmarkdown}
-%\VignetteIndexEntry{raquamaps-intro}
+vignette: >
+  %\VignetteIndexEntry{raquamaps-intro}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
   \usepackage[utf8]{inputenc}
--->
+---
 
 <!--
 theme specifies the Bootstrap theme to use for the page (themes are drawn from the Bootswatch theme library). Valid themes include "default", "cerulean", "journal", "flatly", "readable", "spacelab", "united", and "cosmo". Pass null for no theme (in this case you can use the css parameter to add your own styles).
@@ -105,7 +105,7 @@ hcaf <-
   # discard irrelevant fields
   # and rename the cell identifier column name to
   # harmonize with the other datasets
-  select(loiczid = LOICZID, one_of(clim_vars)) 
+  dplyr::select(loiczid = LOICZID, one_of(clim_vars)) 
 
 # Define a cleanup function, intended for use across columns
 replace_9999 <- function(x) 
@@ -166,7 +166,7 @@ presence_galemys_pyrenaicus <-
   # in case of duplicate cell ids, retrieve only distinct ids
   distinct(loiczid) %>%
   #  group_by(loiczid) %>%
-  select(loiczid)
+  dplyr::select(loiczid)
 
 # Get a list of all latin names  for all species in the 
 # bundled occurrence dataset ordered with the species with 
@@ -176,7 +176,7 @@ presence_occs %>%
   group_by(lname) %>%
   summarise(count = n_distinct(loiczid)) %>%
   arrange(desc(count)) %>%
-  select(species = lname, count)
+  dplyr::select(species = lname, count)
 
 ```
 
@@ -304,7 +304,7 @@ p <- calc_probs(hcaf_eu, spread_gws)
 hdc_world <- 
   tbl_df(get(data("aquamaps_hc"))) %>%
   mutate(loiczid = LOICZID) %>%
-  select(-LOICZID)
+  dplyr::select(-LOICZID)
 rownames(hdc_world) <- hdc_world$loiczid
 
 # TODO: Ask Sven K for reasonable habitat
