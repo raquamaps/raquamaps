@@ -1,34 +1,41 @@
-# Sample .travis.yml for R projects
+language: R
+r: 3.2.3
+repos:
+  CRAN: https://cloud.r-project.org
+  ropensci: http://packages.ropensci.org
+  
+sudo: false
 
-language: r
-sudo: required
-warnings_are_errors: true
+env:
+  global:
+    - R_PKG="$(basename $TRAVIS_REPO_SLUG)"
 
-#notifications:
-#  email:
-#    on_success: change
-#    on_failure: change
+addons:
+  apt:
+    sources:
+      - r-packages-precise
+    packages:
+      - r-base-dev
+      - r-recommended
+      - libfftw3-dev
+      - libv8-dev
+      - libxml2-dev
+
+cache: packages
 
 before_install:
-  - sudo add-apt-repository -y ppa:marutter/c2d4u
-  - sudo apt-get update -qq
-  - sudo apt-get install -y libv8-dev
+  - tlmgr install index
+  
+before_deploy:
+  - echo "Tags are deployed to GitHub Releases for $R_PKG"
 
-r_binary_packages:
-  - testthat
-  - knitr
-  - dplyr
-  - classInt
-  - maps
-  - RColorBrewer
-  - ggmap
-  - rgdal
-
-#r_github_packages:
-#  - jimhester/covr
-
-#after_success:
-#  - Rscript -e 'library(covr); coveralls()'
-
-# ggplot2
-# raster
+deploy:
+  provider: releases
+  api_key:
+    secure: mLzoMfNmFB+mSkYAviH135BIloTvf51cUbxz++wwOWIqgs9P+z/Z/S7wet9sPNKH3R/QigNVHt9izpD7z2pGN2JGvtx2Tcag5+M/knaOAPM6op7JQwEZvCwnRylTqa8w1uQXtlNd7viQx4Fs09hEPHX/acRUzukvzFxJJ4Pf7Mab8Yd4mLx9PZNd1ZrMKsfkhru4dapPh+U1Rr6O93e2CeIq7aTOuxhnTNJSV3zZzJIbHV7WxRN/Qto6QJkfKJtvoAwllw2EjHJMG+IBFKqQvVF4qkSHe5VDwdIObtYf4yQh0b9Gd4d+gfgm2URtzfJrs3a3V08U+xQZfwl+DuXMVYuRoe2bPjS9dLmHrSGqLi6KDmvwyRphcNJBmsQJIohtc1EOL5q54OTji26GkcGcUJJ/D+/KiMo3YwbWbLOKucjQRvlOCVUDVwHc6yDEVtREjdMKLZl0pkk+4Vkv9K/zYAGu1GOtMVB2i1SxRDiHeNNTeiaOSEdDNG3YnRaOGgAKwhbLMxbmA5DdLgm/C0iaNT0ELYMw9QLxLDveivS9ko2ttH/RMTureutpPr/YBrWWCqS+ASWa5nCXzt31oJ/EYezdWANsyMMO0/JTiqfExIMb7sTX4WXhEoBtUBU0xusOt8GevO2dcxRXyI4gb/G0UXEC3mj6V16jZSodJkRORAI=
+  file_glob: true
+  file: ! "${R_PKG}_*.tar.gz"
+  skip_cleanup: true
+  on:
+    repo: raquamaps/raquamaps
+    tags: true

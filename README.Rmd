@@ -1,7 +1,4 @@
 ---
-title: "raquamaps"
-author: ""
-date: "`r Sys.Date()`"
 output:
   md_document:
     variant: markdown_github
@@ -19,6 +16,17 @@ output:
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
+```{r, echo = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "README-"
+)
+```
+
+```{r include=FALSE}
+knitr::opts_chunk$set(warning=FALSE, comment=NA)
+```
 
 ```console
 Welcome to ...                        https://raquamaps.github.io
@@ -36,9 +44,6 @@ It's already possible to create Aqua Maps using https://aquamaps.org, but the `r
 
 This package can be used in an IDE like `RStudio` (recommended) or from an application like `QGIS` or the embedded UI can be used directly from a web browser in order to generate predicted distribution maps for marine species.
 
-```{r include=FALSE}
-knitr::opts_chunk$set(warning=FALSE, comment=NA)
-```
 
 ## Installing from github
 
@@ -97,7 +102,7 @@ Don't forget to put the .tar.gz source tarball into the archive-tarball director
 
 raquamaps would have not been possible without many amazing R libraries, such as
 
-* dplyr, stringr etc from Hadley Wickham
+* dplyr, tidyr, stringr etc from Hadley Wickham
 * rgbif etc from ROpenSci
 
 ## References
@@ -110,6 +115,7 @@ raquamaps would have not been possible without many amazing R libraries, such as
 
 * Östergren J, Kullander S O, Prud'homme O, Reyes K K, Kaschner K and Froese R (in preparation) Predicting freshwater-dependent species distributions in Europe
 
-## License
+## Meta
 
-raquamaps is licensed under the AGPL license.
+* Please [report any issues or bugs](https://github.com/mskyttner/swedishbirdtrends/issues).
+* License: AGPL

@@ -9,7 +9,7 @@ output:
 ---
 <!--
 %\VignetteEngine{knitr::rmarkdown}
-%\VignetteIndexEntry{raquamaps}
+%\VignetteIndexEntry{raquamaps-intro}
   \usepackage[utf8]{inputenc}
 -->
 

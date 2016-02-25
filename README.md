@@ -85,7 +85,7 @@ Credits
 
 raquamaps would have not been possible without many amazing R libraries, such as
 
--   dplyr, stringr etc from Hadley Wickham
+-   dplyr, tidyr, stringr etc from Hadley Wickham
 -   rgbif etc from ROpenSci
 
 References
@@ -99,7 +99,8 @@ References
 
 -   Östergren J, Kullander S O, Prud'homme O, Reyes K K, Kaschner K and Froese R (in preparation) Predicting freshwater-dependent species distributions in Europe
 
-License
--------
+Meta
+----
 
-raquamaps is licensed under the AGPL license.
+-   Please [report any issues or bugs](https://github.com/mskyttner/swedishbirdtrends/issues).
+-   License: AGPL
