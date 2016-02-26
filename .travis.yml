@@ -21,6 +21,7 @@ addons:
       - libv8-dev
       - libxml2-dev
       - libhdf5-serial-dev
+      - libhdf5-dev
       - libproj-dev
       - libgdal-dev
 
