@@ -20,11 +20,10 @@ addons:
       - libfftw3-dev
       - libv8-dev
       - libxml2-dev
-      - libgdal-dev
-      - libgdal1-dev
       - libproj-dev
-      - libcurl4-openssl-dev
-      
+      - libgdal1
+      - libgdal1-dev
+
 cache: packages
 
 before_install:
