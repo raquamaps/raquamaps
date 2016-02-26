@@ -20,11 +20,9 @@ addons:
       - libfftw3-dev
       - libv8-dev
       - libxml2-dev
-      - libhdf5-serial-dev
-      - libhdf5-7
-      - libhdf5-dev
-      - libproj-dev
-      - libgdal-dev
+
+r_binary_packages:
+  - rgdal
 
 cache: packages
 
