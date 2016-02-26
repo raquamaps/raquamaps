@@ -1,0 +1,93 @@
+---
+Title: "Overview for AquaMaps and the raquamaps R package"
+author: ""
+date: "`r Sys.Date()`"
+output:
+  html_document:
+    theme: spacelab
+    highlight: default
+vignette: >
+  %\VignetteIndexEntry{raquamaps-overview}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+  \usepackage[utf8]{inputenc}    
+---
+
+# 2.a Aim of the AquaMaps algorithm
+
+Species distributions represent a combination of historical and ecological factors. Modelling distributions based on environmental data only, will show suitable habitats rather than actual distribution which must also take into account physical barriers to dispersal. Species modelling is also dependent on the sampling density and evenness. 
+
+The AquaMaps modelling concept combines spatial and ecological parameters with an option for expert adjustments, and permits use of large occurrence databases (GBIF, FishBase) by filtering taxon names through a validator. The power of AquaMaps is particularly in predictions of occurrence at a large scale and using sparse distribution records.
+
+# 2.b Why is `raquamaps` needed?
+
+By implementing AquaMaps in R we will make AquaMaps more versatile and compatible with other R modelling approaches including opening for other algorithms than the native AquaMaps algorithm, but particularly providing more speed and user programming options for AquaMaps. 
+
+AquaMaps modelling is an important tool particularly for large scale modelling with few data points and can be used with alternative environmental layers such as IPCC projections.
+
+# 2.c Main idea behind `raquamaps`
+
+The `raquamaps` package implements the AquaMaps algorithm used to build an environmental envelope for each species, and uses web services and data harvesting tools implemented in R (`raquamaps`, `rgbif`) to map species distributions and build environmental layers. Thus a complete R package is created, which can be built into or be used from other applications, or run as a server application or as an independent desktop application. 
+
+# 2.d Approach
+
+## Components
+
+AquaMaps includes the following components: 
+
+  - A global indexed grid of half or quarter degree cells based on the C-squares system of hierarchical numerical identifiers, providing environmental parameters (e.g., temperature, precipitation, salinity, etc.) for each cell
+  - Occurrence frequency for species in each cell
+  - Known environmental envelope for each species calculated on the basis of occurrence data (environmental values in cells of occurrence) or using expert information. 
+  
+In the `raquamaps` package these components are provided in the follow way:
+
+- A reference dataset is provided called `aquatic_hcaf` where `hcaf` is an acronym for "half degree cell authority file". This dataset contains data for a large number of biological climate environment parameters, both categorical and numerical. For example, categorical data including grid cell identifiers (such as CSquareCodes and LOICZID), country, cell type and EEZ is included. More than 80 different numerical layers are also included, providing information on annual mean temperatures, precipitation levels, depth, elevation, ice concentration, primary productivity etc.
+
+- For occurrence frequency, up-to-date data about known occurrences can be fetched from GBIF (using the `rgbif` package) and/or from Fishbase (using the `rfishbase` package). The package documentation shows how to calculate the frequency of species per grid cell and functions are provided that allow for batch calculations. Usage is documented in the package vignettes.
+
+- The species preferences for environmental envelopes can be calculated on the basis of the occurrence data through the use of functions provided in the package. The results in terms of environmental envelopes can later be adjusted to cater for expert tuning of parameters.
+
+## Calculating probability of occurrence
+
+For each taxon analysed, an envelope is calculated for each environmental parameter, which provides the upper and lower tolerance limits for the taxon. The probability of occurrence is then calculated for each parameter in each cell and may range from 0 to 1. The individual parameter probabilities are then multiplied to give the prediction of occurrence in the cell.
+
+
+## Accounting for physical barriers to dispersal
+
+AquaMaps can show actual distribution (point data), projected distribution using the probabilities of occurrence (suitable habitat), or modelled actual distribution using a  combination of probabilities and a system of bounding boxes or constraining shapes constraining the distribution to known areas of occurrence. The bounding boxes may be based on Fishery zones (FAO areas), watersheds or other geographical structures that limit taxon distribution in addition to ecological niche, or expert data. 
+
+## Predictive analytics
+
+By adjusting the environmental data to IPCC models AquaMaps can also present projected distributions in the future according to global or regional warming scenarios. 
+
+## Displaying results
+
+The tool can also be used for species richness maps, either using raw occurrence data or models showing constrained or absolute suitable habitats. 
+
+Because `raquamaps` has probabilities of occurrence as end product, the graphic system and the underlying statistics tool in `raquamaps` can also be used to display results obtained with other modeling tools.
+
+## Marine versus land modelling scenarios
+
+AquaMaps works well with marine areas, and has also been used for continental scale terrestrial and freshwater scenarios.  
+
+## Up and downscaling
+
+Downscaling of AquaMaps is being tested, but the strength of the system is models of large scale patterns using low density datapoints, e.g., at European level, and an obvious use is for evaluating potential invasive species.  
+
+# Technical information
+
+The present release of rAquaMaps is available online at https://raquamaps.github.io, where installation instructions and documentation is published. The source code is available at https://github.com/raquamaps.
+
+Most recent changes as of Oct 1 2015 were:
+
+- The algorithm is now designed to allow for changing the model used, for example to use an additive model instead of the multiplicative model and to change the bioclimate variables used in the calculations
+
+- Results can be displayed as 5-step chloropeth maps using various class intervals (where the default is Fisher-Jenks class intervals, but it is also possible to discretize the maps using other types of class intervals, such as quantiles, equal length class intervals etc).  The usage of 5 stepped class intervals is inspired from best practice for chloropeth maps as outlines in Slocum.
+
+- Maps are provided in static (ggplot) format and dynamic (web format using leaflet JS maps). The web maps allows for zooming and looking at raster data details.
+
+- Automatic builds are integrated through Travis-CI verifies that the package can be built properly and complies with CRAN rules for R-packages
+
+# Reference:
+
+Ready, J., K. Kaschner, A.B. South, P.D Eastwood, T. Rees, J. Rius, E. Agbayani, S. Kullander and R. Froese (2010). Predicting the distributions of marine organisms at the global scale. Ecological Modelling 221(3): 467-478

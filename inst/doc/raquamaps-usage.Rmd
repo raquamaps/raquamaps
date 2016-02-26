@@ -1,0 +1,152 @@
+---
+Title: "raquamaps - Example Usage"
+author: "Markus Skyttner"
+date: "`r Sys.Date()`"
+output:
+  html_document:
+    theme: spacelab
+    highlight: default
+vignette: >
+  %\VignetteIndexEntry{raquamaps-examples}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+  \usepackage[utf8]{inputenc}        
+---
+
+<!--
+theme specifies the Bootstrap theme to use for the page (themes are drawn from the Bootswatch theme library). Valid themes include "default", "cerulean", "journal", "flatly", "readable", "spacelab", "united", and "cosmo". Pass null for no theme (in this case you can use the css parameter to add your own styles).
+
+highlight specifies the syntax highlighting style. Supported styles include "default", "tango", "pygments", "kate", "monochrome", "espresso", "zenburn", "haddock", and "textmate". Pass null to prevent syntax highlighting.
+-->
+
+# The Great White Shark
+
+Let us start with getting some data points for the great white shark. We could use 
+`rgbif` to get it from an online data source, ensuring up-to-date data. Here we
+chose to load persisted data from within this package to enable off-line use.
+
+```{r, echo=TRUE, message=FALSE, warning=FALSE}
+# in this session we need a few packages
+# for data manipulation, raster operations
+# and we load raquamaps, of course
+require("ggplot2")
+require("leaflet")
+require("dplyr")
+require("raster")
+require("sp")
+require("raquamaps")
+require("ggmap")
+
+# helper to load data from the package
+get_data <- function(x) tbl_df(get(data(list = x)))
+
+# get occurrence data (points) for The Great White Shark
+o <- get_data("rgbif_great_white_shark")
+
+o
+```
+
+We now have the point data loaded and want to have an overview
+and perhaps identify outlier or obviously erroneous points, and
+weed those out.
+
+```{r, echo=TRUE, message=FALSE, warning=FALSE}
+occs_ggmap_points(o)
+```
+
+It looks ok, so we want to convert to a grid, "rasterizing" it, summarizing occurrencies across grid cells
+
+```{r, echo=TRUE, message=FALSE, warning=FALSE}
+r <- rasterize_occs(o)
+```
+
+We now inspect this on a map:
+
+```{r, echo=TRUE, message=FALSE, warning=FALSE}
+#occs_ggmap_gridded_polys(r)
+occs_ggmap_gridded(r, legend = FALSE)
+```
+
+We immediately find that it is hard to see such small pixels (half degree cells)... and want to zoom in.
+
+```{r, echo=TRUE, message=FALSE, warning=FALSE}
+
+# are there observations outside Cape Town?
+p <- ggmap::geocode("Cape Town", source = "google")
+occs_ggmap_gridded(r, center = p, padding = 15)
+
+# what about outside SF?
+p <- ggmap::geocode("San Francisco", source = "google")
+occs_ggmap_gridded(r, center = p, padding = 20)
+
+# around the Seychelles?
+p <- ggmap::geocode("Seychelles", source = "google")
+occs_ggmap_gridded(r, center = p, padding = 30)
+
+# Australian East-Coast?
+p <- ggmap::geocode("Surfer's Paradise", source = "google")
+occs_ggmap_gridded(r, center = p, padding = 10)
+
+```
+
+To really be able to zoom and check out details
+we use the web map instead, where we can zoom in on
+all the locations above
+
+```{r, echo=TRUE, message=FALSE, warning=FALSE}
+occs_webmap_gridded(trim(r))
+```
+
+# The European Amphibian
+
+Now lets look at point data from an European amphibian:
+
+```{r, echo=TRUE, message=FALSE, warning=FALSE}
+o <- get_data("rgbif_galemys_pyrenaicus")
+occs_ggmap_points(o)
+```
+
+Here we check visually for outliers and note that
+this looks strange, it seems some point is
+included from way down in Africa:
+
+```{r, echo=TRUE, message=FALSE, warning=FALSE}
+qplot(data = o, x = decimalLatitude, 
+      y = decimalLongitude, xlab = "", ylab = "")
+```
+
+We proceed to remove outliers. In this case
+we remove 0, 0 (seems to be a data error?)
+and everything above lat > 45
+
+```{r, echo=TRUE, message=FALSE, warning=FALSE}
+o <- o %>% 
+  filter((!is.na(decimalLatitude)), (!is.na(decimalLongitude))) %>%
+  filter(!(decimalLatitude == 0 & decimalLongitude == 0)) %>%
+  filter(decimalLatitude < 45)
+
+# look at histograms for coordinates for a sanity check
+hist(o$decimalLatitude)
+hist(o$decimalLongitude)
+
+# compile the summary grid, 
+# trim the grid and map it
+r <- rasterize_occs(o)
+occs_ggmap_gridded(trim(r), legend = FALSE)
+occs_ggmap_gridded(trim(r), legend_title = "Galemys pyrenaicus (n)")
+```
+
+Here are a few ways to sanity check the raster data:
+
+```{r, echo=TRUE, message=FALSE, warning=FALSE}
+# look at frequencies of different values represented in the raster
+freq(r)
+
+# look at a histogram of values in the raster
+hist(values(r))
+
+# quickly plot the raster
+image(trim(r), xlab = NA, ylab = NA)
+#spplot(trim(r))
+#quantile(r, na.rm = TRUE)
+```{r, echo=TRUE, message=FALSE, warning=FALSE}
