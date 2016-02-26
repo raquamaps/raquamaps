@@ -21,8 +21,7 @@ addons:
       - libv8-dev
       - libxml2-dev
       - libproj-dev
-      - libgdal1
-      - libgdal1-dev
+      - libgdal-dev
 
 cache: packages
 
