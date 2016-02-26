@@ -34,8 +34,7 @@ Imports:
     ggmap (>= 2.6.1),
     maps (>= 3.1.0),
     tufte (>= 0.2),
-    purrr (>= 0.2.1)    
-Depends:
+    purrr (>= 0.2.1),
     httr (>= 1.0.0),
     dplyr (>= 0.4.0),
     tidyr (>= 0.4.1),
