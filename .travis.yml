@@ -20,6 +20,7 @@ addons:
       - libfftw3-dev
       - libv8-dev
       - libxml2-dev
+      - libhdf5-serial-dev
       - libproj-dev
       - libgdal-dev
 
