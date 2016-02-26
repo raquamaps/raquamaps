@@ -6,9 +6,13 @@ For more fine-grained list of changes or to report a bug, consult
 * [The issues log](https://github.com/raquamaps/raquamaps/issues)
 * [The commit log](https://github.com/raquamaps/raquamaps/commits/master)
 
+# v0.4.5
+
+* Fixed issue with vignettes not being properly bundled into the R package when installing from GitHub (due to .gitignore blocked inst/doc)
+
 # v0.4.4
 
-* Fixed issue with nativerange function and added some tests
+* Fixed issue with nativerange function when fetching Barracudas from aquamaps.org and added some tests
 
 # v0.4.3
 

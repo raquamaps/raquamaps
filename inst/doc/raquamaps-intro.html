@@ -331,11 +331,8 @@ ggplot(probs, aes(x = probs$p)) + theme_raquamaps() +
 gws &lt;- get_data(&quot;rgbif_galemys_pyrenaicus&quot;)
 
 # Plot the point data, with a world map to provide context
-world &lt;- ggplot2::map_data(&quot;world&quot;)</code></pre>
-<pre><code>## 
-##  # maps v3.1: updated 'world': all lakes moved to separate new #
-##  # 'lakes' database. Type '?world' or 'news(package=&quot;maps&quot;)'.  #</code></pre>
-<pre class="r"><code>ggplot(world, aes(x = long, y = lat, group = group)) +
+world &lt;- ggplot2::map_data(&quot;world&quot;)
+ggplot(world, aes(x = long, y = lat, group = group)) +
   # paint country border
   geom_path(color = &quot;gray50&quot;, alpha = 0.4) +
   # add general styling
