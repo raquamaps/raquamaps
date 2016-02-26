@@ -22,6 +22,7 @@ Imports:
     foreign (>= 0.8),
     raster (>= 2.5),
     sp (>= 1.2),
+    rgdal (>= 1.1),
     classInt (>= 0.1),
     rgbif (>= 0.9),
     leaflet (>= 1.0.0),
