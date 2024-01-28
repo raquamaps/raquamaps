@@ -17,14 +17,16 @@
 nativerange <- function(latinname = default_species(), identifier) {
   #latinname <- "Sphyraena sphyraena"
   
+  ##AM: The <else> condition was missing here, so the 'ids' receiving 'identifier' would be replaced in the next line
   if (!missing(identifier))
     ids <- identifier
-  
-  ids <- get_am_name_uris(latinname)
+  else
+    ids <- get_am_name_uris(latinname)
   
   if (length(ids) < 1)
     stop("Found no match for ", latinname)
   
+  ##AM: This should not happen now since only matches to accepted species names will be returned
   if (length(ids) > 1) {
     warning("More than one match found for ", latinname,
       " so the first one will be used out of ", 
@@ -47,10 +49,14 @@ nativerange <- function(latinname = default_species(), identifier) {
   }
   
   csv_url <- get_am_csv_dl_url(maps)
-  message("Retrieving and parsing native range data from:\n", csv_url)
+  ##AM: Some species have an identifier, and the 'maps' link exists, but there is no range projection on the website
+  ##AM: Trying to retrieve the data for these species was leading to an error
+  if(is.null(csv_url))
+    return(cat("Although the name you entered exists in the Catalogue of Life: 2018 annual checklist, there are not enough good cells for prediction or it is not a marine species."))
+
+  #message("Retrieving and parsing native range data from:\n", csv_url)
   res <- parse_am_csv(csv_url)
-  return (res)
-  
+  return (res)  
 }
 
 #nativerange("Sphyraena sphyraena", "Fis-23821")
@@ -58,36 +64,41 @@ nativerange <- function(latinname = default_species(), identifier) {
 get_am_csv_dl_url <- function(am_nativerangemap_identifier) {
 
   url <- am_nativerangemap_identifier
-  message("Downloading .csv with native range maps data from ", url)
-  map <- GET(url)
-  htm <- content(map, as = "text", encoding = "utf-8")
-  
+  #message("Downloading .csv with native range maps data from ", url)
+  map <- httr::GET(url) ##AM
+  htm <- httr::content(map, as = "text", encoding = "utf-8") ##AM
+
+  ##AM: Some species have an identifier but don't have a range projection on the website
+  ##AM: Ignoring this will lead to an error
+  if(grepl('there are not enough good cells for prediction',htm))
+    return()
+
   # extract download link from JS
   csv_dl <- unlist(stringr::str_extract_all(htm, "window.open\\(.*?CreateCSV.php.*?\\)"))
   re <- ".*window.open\\(&quot;(.*?)&quot;.*"
   csv_dl <- paste0(gsub(re, "\\1", csv_dl), "&download_option=all")
-  res <- GET(csv_dl)
-  htm <- content(res, as = "text", encoding = "utf-8")
+  csv_dl <- paste("http:",csv_dl,sep = "") ##AM
+  res <- httr::GET(csv_dl) ##AM
+  htm <- httr::content(res, as = "text", encoding = "utf-8") ##AM
     
   # extract CSV link location from htm
   re <- "a href=(CSV/\\d+.csv)"
   csv <- unlist(stringr::str_extract_all(htm, re))
   csv <- gsub(re, "\\1", csv)
   dl <- paste0("http://www.aquamaps.org/", csv)
-  return (dl)
-  
+  return (dl)  
 }
 
 
 parse_am_csv <- function(url) {
   
-  dl <- GET(url)
-  csv <- content(dl, as = "text", encoding = "latin1")
+  dl <- httr::GET(url) ##AM
+  csv <- httr::content(dl, as = "text", encoding = "latin1") ##AM
   
   rows <- unlist(strsplit(csv, "\n"))
   
   extract <- function(re) gsub(re, "\\1", grep(re, rows, value = TRUE))
-  message("extracting model parameters")
+  #message("extracting model parameters")
   re <- "Map type: (.*?),"
   map_type <- extract(re)
   re <- "Map Option: (.*?)"
@@ -101,24 +112,35 @@ parse_am_csv <- function(url) {
   re <- "Layer used to generate probabilities: (.*?),"
   layer <- extract(re)
   
-  message("extracting species envelope dataframe")
+  #message("extracting species envelope dataframe")
   extract_df <- function(beg, end) {
     res <- read.csv(file = textConnection(rows[beg : end]),
       stringsAsFactors = FALSE)
-    return (dplyr::tbl_df(res))
+    ##AM: Update deprecated function
+    return (tibble::as_tibble(res))
   }
   hspen_beg <- grep("Species Envelope [(]HSPEN[)]:", rows) + 1
   hspen_end <- grep("Map data (HSPEC) for predicted occurrences", rows, fixed = TRUE)
   hspen <- extract_df(hspen_beg, hspen_end - 1)
+  hspen <- hspen[hspen$X!=' ',] ##AM
   
-  message("extracting predicted occurrences dataframe")
+  #message("extracting predicted occurrences dataframe")
   re <- "Map data [(]HSPEC[)] for predicted occurrences [(]n = (.*?)[)]:"
   n_hspec <- as.numeric(extract(re))
   hspec_beg <- hspen_end + 1
   hspec_end <- hspec_beg + n_hspec
   hspec <- extract_df(hspec_beg, hspec_end)
 
-  message("extracting occurrence cells that created species envelope as data frame")
+  ##AM: Some species have a different table, so the code above will not work
+  ##AM: We can detect this through ncol and apply a correction
+  if(ncol(hspec)==1)
+  {
+    hspec_beg <- hspen_end + 8
+    hspec_end <- hspec_beg + n_hspec
+    hspec <- extract_df(hspec_beg, hspec_end)
+  }
+
+  #message("extracting occurrence cells that created species envelope as data frame")
   re <- "Occurrence cells used for creating environmental envelope [(]n = (.*?)[)]"
   n_occ <- as.numeric(extract(re))
   occ_beg <- grep(re, rows) + 1
@@ -148,13 +170,13 @@ get_am_nativerangemap_uris <- function(am_identifier) {
   id <- am_identifier
   url <- paste0("http://aquamaps.org/preMap2.php?cache=1&SpecID=", id)
   message("Finding aquamaps.org native range maps at ", url)
-  res <- GET(url)
+  res <- httr::GET(url) ##AM
   
   if (res$status != 200)
     stop("Can not retrieve data for ", latinname, 
          " from ", res$url)
   #message("Got ", res, " for ", id)
-  htm <- content(res, as = "text", encoding = "latin1")
+  htm <- httr::content(res, as = "text", encoding = "latin1") ##AM
   
   # extract href (case 1)
   re <- "href='(.*?pre[mM]ap.php?.*?)'"
@@ -201,11 +223,17 @@ get_am_name_uris <- function(latinname = default_species()) {
     "Crit1_Operator=EQUAL&Crit1_Value=", genus, 
     "&Crit2_Operator=EQUAL&Crit2_Value=", species)
 
-  res <- GET(resolver_uri)
+  res <- httr::GET(resolver_uri) ##AM
   
-  htm <- content(res, as = "text", encoding = "utf-8")
-  re <- "href='preMap2.php\\?cache=1&SpecID=(Fis-\\d+)'"
-  identifiers <- unique(gsub(re, "\\1", unlist(stringr::str_extract_all(htm, re))))
+  htm <- httr::content(res, as = "text", encoding = "utf-8") ##AM
+  ##AM: The code 'Fis' is not universal. Different taxonomic groups have different codes
+  re <- "'preMap2.php\\?cache=1&SpecID=(.*?)'"
+  ##AM: Get all identifiers, then select the target identifier based on the accepted species name
+  identifiers <- gsub(re, "\\1", unlist(stringr::str_extract_all(htm, re)))
+  ac <- "<td width='200' valign='top'><i>(.*?) </i></td>"
+  sp <- gsub(ac, "\\1", unlist(stringr::str_extract_all(htm, ac)))
+  sp <- gsub('-',' ',sp)
+  identifiers <- unique(identifiers[which(sp==latinname)])
 
   return (identifiers)
 }
