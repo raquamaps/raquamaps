@@ -6,6 +6,11 @@ For more fine-grained list of changes or to report a bug, consult
 * [The issues log](https://github.com/raquamaps/raquamaps/issues)
 * [The commit log](https://github.com/raquamaps/raquamaps/commits/master)
 
+# v0.4.6
+
+* Some adjustments to the scraping from aquamaps.org, thanks to PR from AndreMenegotto
+* Minor adjustments to make some tests pass (catering for some API deprecations and changes etc)
+
 # v0.4.5
 
 * Fixed issue with vignettes not being properly bundled into the R package when installing from GitHub (due to .gitignore blocked inst/doc)

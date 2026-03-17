@@ -23,4 +23,3 @@ environmental data for only those cells that have a specific species present
  hcaf <- hcaf_by_species(default_species(), default_clim_vars())
 }
 }
-

@@ -7,9 +7,9 @@
 occs_webmap_gridded(r, legend_title = NA)
 }
 \arguments{
-\item{r}{a raster layer}
+\item{r}{a terra SpatRaster}
 
-\item{legend_title}{the title for the color legend, 
+\item{legend_title}{the title for the color legend,
 default is NA}
 }
 \value{
@@ -18,4 +18,3 @@ a web map using leaflet
 \description{
 Plots a raster grid using leaflet
 }
-

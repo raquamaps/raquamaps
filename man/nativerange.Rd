@@ -26,4 +26,3 @@ it as a dataframe
    native_range_df <- nativerange("Sphyraena sphyraena")
 }
 }
-

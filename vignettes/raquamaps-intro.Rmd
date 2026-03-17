@@ -35,7 +35,7 @@ First some recommended R packages that are useful when working with `raquamaps`,
 # plotting
 require("classInt")
 require("ggplot2")
-require("raster")
+require("terra")
 require("RColorBrewer")
 
 # data modelling
@@ -45,7 +45,7 @@ require("raquamaps")
 # data manipulation
 #require("plyr")
 require("dplyr")
-require("reshape2")
+require("tidyr")
 
 # we set our preference for how 
 # we choose to interpret string data 
@@ -80,8 +80,8 @@ rm("aquamaps_galemys_pyrenaicus")  # unload
 # If you want to load a dataset into your own variable you can ...
 # Define a helper function to load reference data from 
 # an R package as a data frame that displays nicely
-get_data <- function(x) 
-  tbl_df(get(data(list = x)))
+get_data <- function(x)
+  tibble::as_tibble(get(data(list = x)))
 
 # ... and use it to load a dataset into your own named variable
 hcaf_eu <- get_data("aquamaps_hcaf_eu")
@@ -112,11 +112,11 @@ replace_9999 <- function(x)
   ifelse(round(x) == -9999, NA, x)
 
 # We apply the above cleanup function across columns, dplyr style
-hcaf_eu <- 
+hcaf_eu <-
   hcaf %>%
-  # recode values across climate variable columns 
+  # recode values across climate variable columns
   # substitute -9999, use NA instead, exclude the "loiczid" column
-  mutate_each(funs(replace_9999), -loiczid)
+  dplyr::mutate(dplyr::across(-loiczid, replace_9999))
 
 hcaf_eu
 ```
@@ -242,7 +242,7 @@ theme_raquamaps <- function() {
 }
 
 # Plot a histogram of the probabilities  
-ggplot(probs, aes(x = probs$p)) + theme_raquamaps() +
+ggplot(probs, aes(x = prod_p)) + theme_raquamaps() +
   geom_bar(fill = "darkgreen", colour = "darkgray")
 
 ```
@@ -301,9 +301,9 @@ p <- calc_probs(hcaf_eu, spread_gws)
 # Using half degree cell grid data for the whole world
 # TODO: unfortunately we miss bioclimate variable data for the full
 # world grid, this should be added
-hdc_world <- 
-  tbl_df(get(data("aquamaps_hc"))) %>%
-  mutate(loiczid = LOICZID) %>%
+hdc_world <-
+  tibble::as_tibble(get(data("aquamaps_hc"))) %>%
+  dplyr::mutate(loiczid = LOICZID) %>%
   dplyr::select(-LOICZID)
 rownames(hdc_world) <- hdc_world$loiczid
 
@@ -318,14 +318,13 @@ You can now proceed to visualize this data in raster format like so:
 ```{r}
 
 # Put the probabilities into a raster layer
-r <- raster(ncol = 720, nrow = 360)
+r <- terra::rast(ncol = 720, nrow = 360)
 r[p$loiczid] <- p$prod_p
 
 # Convert raster layer data to a data frame
-# to simpligy plotting with ggplot2
-cx <- coordinates(r)[ ,1]
-cy <- coordinates(r)[ ,2]
-df <- data.frame(x = cx, y = cy, p = values(r))
+# to simplify plotting with ggplot2
+crds <- terra::crds(r, na.rm = FALSE)
+df <- data.frame(x = crds[, 1], y = crds[, 2], p = terra::values(r, mat = FALSE))
 
 # Shows how to use Fisher-Jenks style class intervals
 # for coloring in the plot
@@ -398,7 +397,7 @@ calc_probs_species <- function(.latinname) {
 #  hcaf_species <- hcaf_by_species(.latinname)
   spreads_species <- calc_spreads_by_species(.latinname)
   hcaf_eu <- default_hcaf()
-  probs <- tbl_df(calc_probs(hcaf_eu, spreads_species))
+  probs <- tibble::as_tibble(calc_probs(hcaf_eu, spreads_species))
   return (probs)
 }
 

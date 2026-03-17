@@ -17,4 +17,3 @@ data frame with coordinates, country and vernacular name
 \description{
 Get presence data using rgbif
 }
-

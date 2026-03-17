@@ -4,7 +4,8 @@
 \name{aquamaps_hcaf_eu}
 \alias{aquamaps_hcaf_eu}
 \title{Half degree cell authority file for EU with bioclimate data (8,493 cells)}
-\format{A data frame [8,593 x 12]
+\format{
+A data frame [8,593 x 12]
 \describe{
   \item{CsquareCod}{CsquareCod}
   \item{LOICZID}{LOICZID}
@@ -19,7 +20,8 @@
   \item{Islands}{Islands}
   \item{Basins}{Basins}
   ...
-}}
+}
+}
 \source{
 \url{https://www.aquamaps.org/}
 }
@@ -30,4 +32,3 @@ aquamaps_hcaf_eu
 A dataset containing reference data for bioclimate variables
 }
 \keyword{datasets}
-

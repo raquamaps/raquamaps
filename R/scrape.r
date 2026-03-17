@@ -106,7 +106,7 @@ parse_am_csv <- function(url) {
   re <- "FAOAreas: (.*?),"
   fao_areas <- as.numeric(unlist(strsplit(fixed = TRUE, trimws(extract(re)), " | ")))
   re <- "Bounding Box [(]NSWE[)]: (.*?)"
-  bbox <- na.omit(as.numeric(unlist(strsplit(fixed = TRUE, trimws(extract(re)), ","))))
+  bbox <- stats::na.omit(as.numeric(unlist(strsplit(fixed = TRUE, trimws(extract(re)), ","))))
   re <- "Pelagic: (.*),"
   pelagic <- extract(re)
   re <- "Layer used to generate probabilities: (.*?),"
@@ -114,7 +114,7 @@ parse_am_csv <- function(url) {
   
   #message("extracting species envelope dataframe")
   extract_df <- function(beg, end) {
-    res <- read.csv(file = textConnection(rows[beg : end]),
+    res <- utils::read.csv(file = textConnection(rows[beg : end]),
       stringsAsFactors = FALSE)
     ##AM: Update deprecated function
     return (tibble::as_tibble(res))
@@ -173,8 +173,7 @@ get_am_nativerangemap_uris <- function(am_identifier) {
   res <- httr::GET(url) ##AM
   
   if (res$status != 200)
-    stop("Can not retrieve data for ", latinname, 
-         " from ", res$url)
+    stop("Can not retrieve data for ", id, " from ", res$url)
   #message("Got ", res, " for ", id)
   htm <- httr::content(res, as = "text", encoding = "latin1") ##AM
   

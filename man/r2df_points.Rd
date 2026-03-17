@@ -2,20 +2,19 @@
 % Please edit documentation in R/convert.r
 \name{r2df_points}
 \alias{r2df_points}
-\title{Converts a raster grid into a dataframe of points which 
+\title{Converts a raster grid into a dataframe of points which
 can be plotted with ggplot}
 \usage{
-r2df_points(raster)
+r2df_points(r)
 }
 \arguments{
-\item{raster}{a raster layer}
+\item{r}{a terra SpatRaster}
 }
 \value{
-a data frame with the cell grid coordinates and values 
-in a data frame with columns x, y, z
+a data frame with cell grid coordinates and values
+in columns x, y, z
 }
 \description{
-Converts a raster grid into a dataframe of points which 
+Converts a raster grid into a dataframe of points which
 can be plotted with ggplot
 }
-

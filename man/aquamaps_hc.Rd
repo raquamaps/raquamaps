@@ -4,7 +4,8 @@
 \name{aquamaps_hc}
 \alias{aquamaps_hc}
 \title{Half degree cell metadata (only identifiers and coordinates)}
-\format{A data frame [8,593 x 12]
+\format{
+A data frame [8,593 x 12]
 \describe{
   \item{CsquareCod}{CsquareCod}
   \item{LOICZID}{LOICZID}
@@ -15,7 +16,8 @@
   \item{CenterLat}{CenterLat}
   \item{CenterLong}{CenterLong}
   ...
-}}
+}
+}
 \source{
 \url{https://www.aquamaps.org/}
 }
@@ -26,4 +28,3 @@ aquamaps_hc
 A dataset containing metadata such as identifiers (CsquareCod, LOICZID) and bbox coords
 }
 \keyword{datasets}
-

@@ -22,4 +22,3 @@ adjustment limits as described in a separate paper (ref: Tamas Jantevik)
  adjusted_spreads <- adjust_spreads(spreads)
 }
 }
-

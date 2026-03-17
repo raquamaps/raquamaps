@@ -15,4 +15,3 @@ environmental parameter names for demonstrational purposes
  clim_vars <- default_clim_vars()
 }
 }
-

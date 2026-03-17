@@ -7,14 +7,13 @@
 rasterize_occs(df)
 }
 \arguments{
-\item{df}{data frame with coordinates in 
+\item{df}{data frame with coordinates in
 decimalLongitude, decimalLatitude columns}
 }
 \value{
-a half degree raster grid with individual cell values representing 
-the count of occurrences within the grid cells
+a half degree terra SpatRaster grid with individual cell values
+representing the count of occurrences within the grid cells
 }
 \description{
 Converts points in data frame into raster
 }
-

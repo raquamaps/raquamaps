@@ -14,4 +14,3 @@ which_cells(.presence = default_presence(), .latinname = default_species())
 \description{
 Return all grid cells identifiers where the specified species occurs
 }
-

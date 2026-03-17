@@ -25,4 +25,3 @@ available for a specific given latinname
    get_am_name_uris("Sphyraena sphyraena")
 }
 }
-

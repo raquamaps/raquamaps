@@ -19,4 +19,3 @@ for a given species, using the bundled reference data
  spread_default <- calc_spreads_by_species(default_species())
 }
 }
-

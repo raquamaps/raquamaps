@@ -15,4 +15,3 @@ a set of species to be used in calculations
  species_list <- default_species_list()
 }
 }
-

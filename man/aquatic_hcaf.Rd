@@ -4,7 +4,8 @@
 \name{aquatic_hcaf}
 \alias{aquatic_hcaf}
 \title{Half degree cell data (various bioclimate layers)}
-\format{A data frame
+\format{
+A data frame
 \describe{
   \item{CsquareCode}{CsquareCode}
   \item{Basin}{Basin}
@@ -138,7 +139,8 @@
   \item{SalinityB2100c}{SalinityB2100c}
   \item{IceCon2100c}{IceCon2100c}
   \item{PrimProd2100c}{PrimProd2100c}
-}}
+}
+}
 \source{
 \url{https://www.aquamaps.org/}
 }
@@ -149,4 +151,3 @@ aquatic_hcaf
 A dataset containing identifiers and bioclimate layers
 }
 \keyword{datasets}
-

@@ -1,5 +1,5 @@
-get_data <- function(x) 
-  tbl_df(get(data(list = x)))
+get_data <- function(x)
+  tibble::as_tibble(get(utils::data(list = x, envir = environment())))
 
 #' Default bioclimate variable names in raquamaps
 #' 
@@ -180,29 +180,28 @@ hcaf_by_species <- function(
 #' @export
 calc_spreads <- function(.hcaf_species) {
 
-  spread_measures <- funs(
-    n = n(),
-    n_distinct = n_distinct(.),
-    n_NA = sum(is.na(.)),
-    min = min(., na.rm = TRUE),  
-    max = max(., na.rm = TRUE),
-    q1 = quantile(., probs = c(0.25), names = FALSE, na.rm = TRUE),  
-    q3 = quantile(., probs = c(0.75), names = FALSE, na.rm = TRUE),
-    d1 = quantile(., probs = c(0.10), names = FALSE, na.rm = TRUE),
-    d9 = quantile(., probs = c(0.90), names = FALSE, na.rm = TRUE)
-  )
-  
-  res <- 
+  res <-
     # pivot the cell data to (loiczid, Measure, value) tuples
-    tbl_df(melt(.hcaf_species, id.vars = "loiczid", variable.name = "Measure")) %>%
-    # group by each bioclimate Measure and remove the cell id
-    group_by(Measure) %>% select(-loiczid) %>%
-    # apply a set of functions to each column (only numerical "value")
-    summarise_each(spread_measures) %>%
+    tidyr::pivot_longer(.hcaf_species, -loiczid, names_to = "Measure") %>%
+    # group by each bioclimate Measure
+    group_by(Measure) %>%
+    # compute spread statistics per measure
+    summarise(
+      n          = n(),
+      n_distinct = n_distinct(value),
+      n_NA       = sum(is.na(value)),
+      min        = min(value, na.rm = TRUE),
+      max        = max(value, na.rm = TRUE),
+      q1         = stats::quantile(value, probs = 0.25, names = FALSE, na.rm = TRUE),
+      q3         = stats::quantile(value, probs = 0.75, names = FALSE, na.rm = TRUE),
+      d1         = stats::quantile(value, probs = 0.10, names = FALSE, na.rm = TRUE),
+      d9         = stats::quantile(value, probs = 0.90, names = FALSE, na.rm = TRUE),
+      .groups    = "drop"
+    ) %>%
     # add new columns with calculated range measures
     mutate(range = max - min, iqr = q3 - q1, idr = d9 - d1) %>%
     # round each column except the first one
-    mutate_each(funs(round), -Measure)
+    mutate(across(-Measure, round))
   
   return (res)
 }
@@ -275,19 +274,19 @@ default_model <- paste(default_clim_vars(), collapse = " * ")
 calc_probs <- function(hcaf_species, spreads) {   
   
   #t %>% filter(Measure == "NPP") %>% mutate(p = calc_prob(value, min, max, d1, d9))
-  res <- 
+  res <-
     # pivot the cell data to (loiczid, Measure, value) tuples
-    tbl_df(melt(hcaf_species, id.vars = "loiczid", variable.name = "Measure")) %>%
+    tidyr::pivot_longer(hcaf_species, -loiczid, names_to = "Measure") %>%
     # group by each bioclimate Measure and cell id
-    group_by(Measure, loiczid) %>% 
+    group_by(Measure, loiczid) %>%
     # add columns with relevant spread measures
     left_join(spreads, by = "Measure") %>%
-    # apply a set of functions to relevant column (here "value")
+    # apply calc_prob to relevant column (here "value")
     mutate(p = calc_prob(value, min, max, d1, d9)) %>%
-    # use only resulting probabilites for all (measure, cell) tuples
-    select(Measure, loiczid, p) %>% 
-    # pivot (cast) to get probabilities in columns (wide instead of thin)
-    dcast(formula = loiczid ~ Measure, value.var = "p") %>%
+    # use only resulting probabilities for all (measure, cell) tuples
+    select(Measure, loiczid, p) %>%
+    # pivot to get probabilities in columns (wide instead of long)
+    tidyr::pivot_wider(names_from = Measure, values_from = p) %>%
     # calculate the combined probabilities (the model) for each cell
     mutate(
       # TODO: make the model here pluggable, ie use default_model()
@@ -297,7 +296,7 @@ calc_probs <- function(hcaf_species, spreads) {
       #    prod_p_vif9 = prod_p_vif6 * Bio8 * Bio8 * Bio18,         
       geomprod_p = prod_p ^ (1 / length(default_clim_vars()))
     ) 
-  return (tbl_df(res))
+  return(tibble::as_tibble(res))
 }
 
 #' Adjustment of climate summary stat values during envelope 
@@ -322,7 +321,7 @@ adjust_spreads <- function(spreads) {
   # SoilpH, SoilCarbon, NPP: if -9999 reset to min of non-neg values
   
   # Adjustment of spread summary stats data
-  adj_data <- read.csv(header = TRUE, textConnection(
+  adj_data <- utils::read.csv(header = TRUE, textConnection(
     gsub("[ ]{3,}", "", x = 
            "Measure, MinRange, MaxRange, ErrTol, AdjDist
          Elevation, 0, 5669, 2, 1
@@ -336,11 +335,10 @@ adjust_spreads <- function(spreads) {
          #"runoffannual", 0, 69, 2, 1   
     )))
   
-  adjustments <- 
-    tbl_df(adj_data) %>%
-    # rowwise() %>%  # if this is used then there will be no Measure column
-    group_by(Measure) %>%
-    summarise_each(funs(eval(parse(text = .))), -Measure)
+  adjustments <-
+    tibble::as_tibble(adj_data) %>%
+    # evaluate each string column as an R expression to get numeric values
+    mutate(across(-Measure, \(x) sapply(x, \(s) eval(parse(text = trimws(s))))))
   
   adjust_values <- function(x) {
     
@@ -369,9 +367,9 @@ adjust_spreads <- function(spreads) {
     
     # due to too small difference
     if (!is.na(s$ErrTol) && s$idr < s$ErrTol) {
-      s$d1 <- idr - s$AdjDist
-      s$d9 <- idr + s$AdjDist
-    }  
+      s$d1 <- s$idr - s$AdjDist
+      s$d9 <- s$idr + s$AdjDist
+    }
     
     # update interdecile range
     s$idr <- s$d9 - s$d1
@@ -384,8 +382,8 @@ adjust_spreads <- function(spreads) {
     group_by(Measure) %>%
     do(adjust_values(.)) %>%
     select(one_of(names(spreads))) %>%
-    ungroup %>% 
-    mutate_each(funs(round), -Measure)
+    ungroup() %>%
+    mutate(across(-Measure, round))
   
   return(res)
 }
@@ -420,7 +418,7 @@ calc_spreads_by_species <- function(.latinname) {
 calc_probs_by_species <- function(.latinname) {
   hs <- hcaf_by_species(.latinname)
   s <- calc_spreads_by_species(.latinname)
-  tbl_df(calc_probs(hs, s))
+  tibble::as_tibble(calc_probs(hs, s))
 }
 
 

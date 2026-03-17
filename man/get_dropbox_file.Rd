@@ -24,4 +24,3 @@ destination directory.
 get_dropbox_file("u4ipvf1tfo4izhq/AACVIxriWFkMfoliMtIyRUDPa", "/tmp/test.zip")
 }
 }
-

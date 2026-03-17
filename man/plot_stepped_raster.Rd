@@ -4,10 +4,10 @@
 \alias{plot_stepped_raster}
 \title{Plot raster data in raquamaps style}
 \usage{
-plot_stepped_raster(raster, breaks, trim = FALSE)
+plot_stepped_raster(r, breaks, trim = FALSE)
 }
 \arguments{
-\item{raster}{raster layer}
+\item{r}{a terra SpatRaster (discretized, e.g. from stepped_raster)}
 
 \item{breaks}{vector with character strings describing intervals}
 
@@ -19,4 +19,3 @@ plot of the raster
 \description{
 Plot raster data in raquamaps style
 }
-

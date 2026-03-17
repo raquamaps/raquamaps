@@ -19,4 +19,3 @@ This function returns a data frame with reference data
  hcaf <- default_hcaf()
 }
 }
-

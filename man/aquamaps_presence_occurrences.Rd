@@ -4,14 +4,16 @@
 \name{aquamaps_presence_occurrences}
 \alias{aquamaps_presence_occurrences}
 \title{Example grid cell data for various species (approx 40 000 rows)}
-\format{A data frame [39,307 x 4]
+\format{
+A data frame [39,307 x 4]
 \describe{
   \item{loiczid}{loiczid}
   \item{csquarecode}{csquarecode}
   \item{lname}{lname}
   \item{occurrence}{occurrence}
   ...
-}}
+}
+}
 \source{
 \url{https://www.aquamaps.org/}
 }
@@ -22,4 +24,3 @@ aquamaps_presence_occurrences
 A dataset that should be possible to get from rgbif, should show how to do it.
 }
 \keyword{datasets}
-

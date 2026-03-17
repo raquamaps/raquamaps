@@ -19,4 +19,3 @@ given environmental data for a species
  spreads <- calc_spreads(hcaf_by_species())
 }
 }
-

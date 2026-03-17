@@ -16,4 +16,3 @@ indicate cells with presence of species
  presence <- default_presence()
 }
 }
-

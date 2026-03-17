@@ -19,4 +19,3 @@ Function to calculate probabilities
  p <- calc_probs(hcaf_by_species(), spreads)
 }
 }
-

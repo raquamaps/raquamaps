@@ -4,17 +4,23 @@
 \alias{occs_ggmap_gridded}
 \title{Plots a raster layer as a gridded map using ggplot}
 \usage{
-occs_ggmap_gridded(r, legend = TRUE, legend_title = "Occurrences (n)",
-  center, padding = 10)
+occs_ggmap_gridded(
+  r,
+  legend = TRUE,
+  legend_title = "Occurrences (n)",
+  center,
+  padding = 10
+)
 }
 \arguments{
-\item{r}{a raster layer with with occurrence points}
+\item{r}{a terra SpatRaster with occurrence points}
 
-\item{legend}{a boolean indicting whether to include the color legend}
+\item{legend}{a boolean indicating whether to include the color legend}
 
 \item{legend_title}{a character string explaining which variable is displayed}
 
-\item{center}{optional coordinate from geocode to center the map on}
+\item{center}{optional coordinate (numeric vector c(lon, lat)) to center
+the map on}
 
 \item{padding}{distance in degrees around the center to include in the map}
 }
@@ -24,4 +30,3 @@ a ggplot
 \description{
 Plots a raster layer as a gridded map using ggplot
 }
-

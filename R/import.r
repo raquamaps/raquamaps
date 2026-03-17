@@ -10,16 +10,16 @@ presence_rgbif <- function(
   
   message("Patience please, getting data from gbif.org can be slow... ")
   
-  key <- name_backbone(name = latinname)
+  key <- rgbif::name_backbone(name = latinname)
   key <- key$speciesKey
-  
-  occs <- occ_search(taxonKey = key, 
-                     results = "data", limit = maxlimit)
+
+  occs <- rgbif::occ_search(taxonKey = key,
+                             results = "data", limit = maxlimit)
   
   # pick out only relevant fields 
   # for coords and country
-  o <- 
-    tbl_df(occs$data) %>%
+  o <-
+    tibble::as_tibble(occs$data) %>%
     select(
       decimalLatitude, 
       decimalLongitude, 

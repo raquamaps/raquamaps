@@ -15,4 +15,3 @@ a ggplot
 \description{
 Plots an occurrence data frame with points as a map using ggplot
 }
-

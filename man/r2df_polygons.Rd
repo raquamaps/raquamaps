@@ -2,19 +2,18 @@
 % Please edit documentation in R/convert.r
 \name{r2df_polygons}
 \alias{r2df_polygons}
-\title{Converts a raster grid into a dataframe of closed polygons which 
+\title{Converts a raster grid into a dataframe of closed polygons which
 can be plotted with ggplot}
 \usage{
-r2df_polygons(raster)
+r2df_polygons(r)
 }
 \arguments{
-\item{raster}{a raster layer}
+\item{r}{a terra SpatRaster}
 }
 \value{
-a data frame with the cell grid as polygons
+a data frame with columns long, lat, group, bin
 }
 \description{
-Converts a raster grid into a dataframe of closed polygons which 
+Converts a raster grid into a dataframe of closed polygons which
 can be plotted with ggplot
 }
-

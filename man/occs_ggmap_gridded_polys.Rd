@@ -4,10 +4,10 @@
 \alias{occs_ggmap_gridded_polys}
 \title{Plots a raster grid using ggplot and polygons}
 \usage{
-occs_ggmap_gridded_polys(raster)
+occs_ggmap_gridded_polys(r)
 }
 \arguments{
-\item{raster}{a raster layer}
+\item{r}{a terra SpatRaster}
 }
 \value{
 a ggplot
@@ -15,4 +15,3 @@ a ggplot
 \description{
 Plots a raster grid using ggplot and polygons
 }
-

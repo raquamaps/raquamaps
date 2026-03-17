@@ -7,7 +7,7 @@
 which_cells_in_raster(r, lower_limit = 0)
 }
 \arguments{
-\item{r}{raster}
+\item{r}{a terra SpatRaster}
 
 \item{lower_limit}{raster cell values higher than this parameter
 is interpreted as presence}
@@ -18,4 +18,3 @@ a vector of raster grid cell identifiers (loiczids)
 \description{
 Raster grid cell identifiers with presence
 }
-

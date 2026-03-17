@@ -4,7 +4,8 @@
 \name{aquamaps_qc}
 \alias{aquamaps_qc}
 \title{Quarter degree cell metadata (only identifiers and coordinates)}
-\format{A data frame
+\format{
+A data frame
 \describe{
   \item{OBJECTID}{OBJECTID}
   \item{Quadrant}{Quadrant}
@@ -26,7 +27,8 @@
   \item{CenterLon}{CenterLon}
   \item{Shape}{Shape}
   ...
-}}
+}
+}
 \source{
 \url{https://www.aquamaps.org/}
 }
@@ -37,4 +39,3 @@ aquamaps_qc
 A dataset containing metadata such as identifiers and bbox coords
 }
 \keyword{datasets}
-

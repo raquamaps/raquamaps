@@ -19,4 +19,3 @@ probabilities for a given species, using the bundled reference data
  probs_default <- calc_probs_by_species(default_species())
 }
 }
-

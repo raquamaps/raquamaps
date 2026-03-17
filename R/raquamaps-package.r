@@ -26,8 +26,7 @@
 #'  species distributions in Europe
 #' @name raquamaps-package
 #' @aliases raquamaps
-#' @keywords package
+#' @keywords internal
 #' @examples #see functions.
-#' @docType package
-#' @import dplyr reshape2 crayon httr tidyr
-NULL
+#' @import dplyr crayon httr tidyr
+"_PACKAGE"

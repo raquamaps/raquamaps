@@ -4,7 +4,8 @@
 \name{rgbif_galemys_pyrenaicus}
 \alias{rgbif_galemys_pyrenaicus}
 \title{Example grid cell data for one specific species (Galemys pyrenaicus)}
-\format{A data frame
+\format{
+A data frame
 \describe{
   \item{decimalLatitude}{decimalLatitude}
   \item{decimalLongitude}{decimalLongitude}
@@ -12,7 +13,8 @@
   \item{countryCode}{countryCode}
   \item{vernacularName}{vernacularName}
   ...
-}}
+}
+}
 \source{
 \url{https://www.aquamaps.org/}
 }
@@ -23,4 +25,3 @@ rgbif_galemys_pyrenaicus
 A dataset fetched using rgbif on 31st of May 2015
 }
 \keyword{datasets}
-

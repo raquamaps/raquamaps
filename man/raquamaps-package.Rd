@@ -2,8 +2,8 @@
 % Please edit documentation in R/raquamaps-package.r
 \docType{package}
 \name{raquamaps-package}
-\alias{raquamaps}
 \alias{raquamaps-package}
+\alias{raquamaps}
 \title{raquamaps}
 \description{
 raquamaps provides tools that make it easier to produce Aqua Maps.
@@ -40,5 +40,16 @@ Kesner-Reyes, K., K. Kaschner, S. Kullander, C. Garilao,
  Kaschner K and Froese R (in preparation) Predicting freshwater-dependent 
  species distributions in Europe
 }
-\keyword{package}
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://github.com/raquamaps/raquamaps}
+  \item Report bugs at \url{https://github.com/raquamaps/raquamaps/issues}
+}
 
+}
+\author{
+\strong{Maintainer}: Markus Skyttner \email{markus.skyttner@nrm.se}
+
+}
+\keyword{internal}

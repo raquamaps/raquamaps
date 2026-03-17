@@ -8,7 +8,7 @@ export_am_csv_tmp <- function(tbl) {
   fname <- paste0(tempfile(), ".csv")
   # "_", sub("\\s", "_", .latinname), ".csv")  
   message("exporting csv results to ", fname)  
-  write.csv(res, file = fname, row.names = FALSE)
+  utils::write.csv(res, file = fname, row.names = FALSE)
   return (fname)
 }
 

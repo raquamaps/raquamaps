@@ -10,10 +10,9 @@ rasterize_presence(occs = presence_rgbif())
 \item{occs}{data frame with coordinates, from rgbif}
 }
 \value{
-a raster grid with individual cell values representing 
+a terra SpatRaster grid with individual cell values representing
 the count of occurrences within the grid cells
 }
 \description{
 Converts presence data from rgbif into raster data
 }
-
