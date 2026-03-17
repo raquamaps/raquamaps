@@ -1,0 +1,38 @@
+bibentry(
+  bibtype  = "Article",
+  title    = "Predicting the distributions of marine organisms at the global scale",
+  author   = c(
+    person("J.", "Ready"),
+    person("K.", "Kaschner"),
+    person("A.B.", "South"),
+    person("P.D.", "Eastwood"),
+    person("T.", "Rees"),
+    person("J.", "Rius"),
+    person("E.", "Agbayani"),
+    person("S.", "Kullander"),
+    person("R.", "Froese")
+  ),
+  journal  = "Ecological Modelling",
+  year     = "2010",
+  volume   = "221",
+  pages    = "467--478",
+  doi      = "10.1016/j.ecolmodel.2009.10.025"
+)
+
+bibentry(
+  bibtype  = "Article",
+  title    = paste(
+    "Mapping worldwide distributions of marine mammals using a",
+    "Relative Environmental Suitability (RES) model"
+  ),
+  author   = c(
+    person("K.", "Kaschner"),
+    person("R.", "Watson"),
+    person("A.W.", "Trites"),
+    person("D.", "Pauly")
+  ),
+  journal  = "Marine Ecology Progress Series",
+  year     = "2006",
+  volume   = "316",
+  pages    = "285--310"
+)

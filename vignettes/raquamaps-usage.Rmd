@@ -32,13 +32,11 @@ chose to load persisted data from within this package to enable off-line use.
 require("ggplot2")
 require("leaflet")
 require("dplyr")
-require("raster")
-require("sp")
+require("terra")
 require("raquamaps")
-require("ggmap")
 
 # helper to load data from the package
-get_data <- function(x) tbl_df(get(data(list = x)))
+get_data <- function(x) tibble::as_tibble(get(data(list = x)))
 
 # get occurrence data (points) for The Great White Shark
 o <- get_data("rgbif_great_white_shark")
@@ -63,30 +61,36 @@ r <- rasterize_occs(o)
 We now inspect this on a map:
 
 ```{r, echo=TRUE, message=FALSE, warning=FALSE}
-#occs_ggmap_gridded_polys(r)
+# occs_ggmap_gridded_polys(r)
 occs_ggmap_gridded(r, legend = FALSE)
 ```
 
 We immediately find that it is hard to see such small pixels (half degree cells)... and want to zoom in.
 
 ```{r, echo=TRUE, message=FALSE, warning=FALSE}
+geocode <- function(geoname) {
+  geoname |>
+    geocode_nominatim() |>
+    dplyr::select(any_of(c("lat", "lon"))) |>
+    dplyr::mutate(across(everything(), as.double)) |>
+    dplyr::select(c("lon", "lat"))
+}
 
 # are there observations outside Cape Town?
-p <- ggmap::geocode("Cape Town", source = "google")
+p <- geocode("Cape Town")
 occs_ggmap_gridded(r, center = p, padding = 15)
 
 # what about outside SF?
-p <- ggmap::geocode("San Francisco", source = "google")
+p <- geocode("San Francisco")
 occs_ggmap_gridded(r, center = p, padding = 20)
 
 # around the Seychelles?
-p <- ggmap::geocode("Seychelles", source = "google")
+p <- geocode("Seychelles")
 occs_ggmap_gridded(r, center = p, padding = 30)
 
 # Australian East-Coast?
-p <- ggmap::geocode("Surfer's Paradise", source = "google")
+p <- geocode("Surfer's Paradise, Australia")
 occs_ggmap_gridded(r, center = p, padding = 10)
-
 ```
 
 To really be able to zoom and check out details
@@ -94,7 +98,7 @@ we use the web map instead, where we can zoom in on
 all the locations above
 
 ```{r, echo=TRUE, message=FALSE, warning=FALSE}
-occs_webmap_gridded(trim(r))
+occs_webmap_gridded(terra::trim(r))
 ```
 
 # The European Amphibian
@@ -111,8 +115,9 @@ this looks strange, it seems some point is
 included from way down in Africa:
 
 ```{r, echo=TRUE, message=FALSE, warning=FALSE}
-qplot(data = o, x = decimalLatitude, 
-      y = decimalLongitude, xlab = "", ylab = "")
+ggplot2::ggplot(o, ggplot2::aes(x = decimalLatitude, y = decimalLongitude)) +
+  ggplot2::geom_point(alpha = 0.4) +
+  ggplot2::labs(x = "", y = "")
 ```
 
 We proceed to remove outliers. In this case
@@ -120,7 +125,7 @@ we remove 0, 0 (seems to be a data error?)
 and everything above lat > 45
 
 ```{r, echo=TRUE, message=FALSE, warning=FALSE}
-o <- o %>% 
+o <- o %>%
   filter((!is.na(decimalLatitude)), (!is.na(decimalLongitude))) %>%
   filter(!(decimalLatitude == 0 & decimalLongitude == 0)) %>%
   filter(decimalLatitude < 45)
@@ -129,24 +134,24 @@ o <- o %>%
 hist(o$decimalLatitude)
 hist(o$decimalLongitude)
 
-# compile the summary grid, 
+# compile the summary grid,
 # trim the grid and map it
 r <- rasterize_occs(o)
-occs_ggmap_gridded(trim(r), legend = FALSE)
-occs_ggmap_gridded(trim(r), legend_title = "Galemys pyrenaicus (n)")
+occs_ggmap_gridded(terra::trim(r), legend = FALSE)
+occs_ggmap_gridded(terra::trim(r), legend_title = "Galemys pyrenaicus (n)")
 ```
 
 Here are a few ways to sanity check the raster data:
 
 ```{r, echo=TRUE, message=FALSE, warning=FALSE}
 # look at frequencies of different values represented in the raster
-freq(r)
+terra::freq(r)
 
 # look at a histogram of values in the raster
-hist(values(r))
+hist(terra::values(r, mat = FALSE), xlab = "count", main = "")
 
 # quickly plot the raster
-image(trim(r), xlab = NA, ylab = NA)
-#spplot(trim(r))
-#quantile(r, na.rm = TRUE)
-```{r, echo=TRUE, message=FALSE, warning=FALSE}
+terra::plot(terra::trim(r))
+# spplot(trim(r))
+# quantile(r, na.rm = TRUE)
+```
