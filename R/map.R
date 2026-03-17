@@ -13,36 +13,39 @@ plot_stepped_raster <- function(r, breaks, trim = FALSE) {
 raquamaps_theme_gridded <- function() {
   out <-
     ggplot2::theme_bw() + ggplot2::theme(
-    axis.text.x = ggplot2::element_text(size = 10),
-    axis.text.y = ggplot2::element_text(size = 10),
-    panel.background = ggplot2::element_blank(),
-    plot.background = ggplot2::element_blank(),
-    panel.grid.minor = ggplot2::element_blank(),
-    panel.grid.major = ggplot2::element_blank(),
-    axis.text = ggplot2::element_blank(),
-    axis.ticks = ggplot2::element_blank(),
-    axis.line = ggplot2::element_blank(),
-    axis.title = ggplot2::element_blank(),
-    panel.border = ggplot2::element_blank())
+      axis.text.x = ggplot2::element_text(size = 10),
+      axis.text.y = ggplot2::element_text(size = 10),
+      panel.background = ggplot2::element_blank(),
+      plot.background = ggplot2::element_blank(),
+      panel.grid.minor = ggplot2::element_blank(),
+      panel.grid.major = ggplot2::element_blank(),
+      axis.text = ggplot2::element_blank(),
+      axis.ticks = ggplot2::element_blank(),
+      axis.line = ggplot2::element_blank(),
+      axis.title = ggplot2::element_blank(),
+      panel.border = ggplot2::element_blank()
+    )
   return(out)
 }
 
 raquamaps_theme <- function() {
   out <-
-    ggplot2::theme(legend.position = "bottom",
-    legend.key = ggplot2::element_blank(),
-    legend.title = ggplot2::element_blank(),
-    axis.line = ggplot2::element_blank(),
-    axis.text.x = ggplot2::element_blank(),
-    axis.text.y = ggplot2::element_blank(),
-    axis.ticks = ggplot2::element_blank(),
-    axis.title.x = ggplot2::element_blank(),
-    axis.title.y = ggplot2::element_blank(),
-    panel.background = ggplot2::element_blank(),
-    panel.border = ggplot2::element_blank(),
-    panel.grid.major = ggplot2::element_blank(),
-    panel.grid.minor = ggplot2::element_blank(),
-    plot.background = ggplot2::element_blank())
+    ggplot2::theme(
+      legend.position = "bottom",
+      legend.key = ggplot2::element_blank(),
+      legend.title = ggplot2::element_blank(),
+      axis.line = ggplot2::element_blank(),
+      axis.text.x = ggplot2::element_blank(),
+      axis.text.y = ggplot2::element_blank(),
+      axis.ticks = ggplot2::element_blank(),
+      axis.title.x = ggplot2::element_blank(),
+      axis.title.y = ggplot2::element_blank(),
+      panel.background = ggplot2::element_blank(),
+      panel.border = ggplot2::element_blank(),
+      panel.grid.major = ggplot2::element_blank(),
+      panel.grid.minor = ggplot2::element_blank(),
+      plot.background = ggplot2::element_blank()
+    )
   return(out)
 }
 
@@ -64,11 +67,14 @@ occs_ggmap_points <- function(occs) {
     ggplot2::geom_polygon(fill = "gray70", alpha = 0.4) +
     ggplot2::coord_fixed(
       xlim = c(xmin, xmax),
-      ylim = c(ymin, ymax)) +
+      ylim = c(ymin, ymax)
+    ) +
     raquamaps_theme_gridded() +
-    ggplot2::geom_point(data = o,
-               ggplot2::aes(x = lon, y = lat, group = 0),
-               alpha = 0.1, color = RColorBrewer::brewer.pal(5, "YlOrRd")[5])
+    ggplot2::geom_point(
+      data = o,
+      ggplot2::aes(x = lon, y = lat, group = 0),
+      alpha = 0.1, color = RColorBrewer::brewer.pal(5, "YlOrRd")[5]
+    )
   return(map)
 }
 
@@ -81,9 +87,10 @@ occs_ggmap_points <- function(occs) {
 #' @param padding distance in degrees around the center to include in the map
 #' @return a ggplot
 #' @export
-occs_ggmap_gridded <- function(r, legend = TRUE,
-  legend_title = "Occurrences (n)", center, padding = 10) {
-
+occs_ggmap_gridded <- function(
+  r, legend = TRUE,
+  legend_title = "Occurrences (n)", center, padding = 10
+) {
   # discretize raster
   sr <- stepped_raster(r)
   r_5 <- sr$raster
@@ -101,9 +108,12 @@ occs_ggmap_gridded <- function(r, legend = TRUE,
     p <- center
     pts <- rbind(p, p + padding, p - padding)
     bb <- sf::st_bbox(
-      sf::st_as_sf(as.data.frame(pts), coords = c(1, 2), crs = "EPSG:4326"))
-    e <- c(xmin = bb[["xmin"]], xmax = bb[["xmax"]],
-           ymin = bb[["ymin"]], ymax = bb[["ymax"]])
+      sf::st_as_sf(as.data.frame(pts), coords = c(1, 2), crs = "EPSG:4326")
+    )
+    e <- c(
+      xmin = bb[["xmin"]], xmax = bb[["xmax"]],
+      ymin = bb[["ymin"]], ymax = bb[["ymax"]]
+    )
   }
 
   world <- ggplot2::map_data(map = "world")
@@ -112,12 +122,17 @@ occs_ggmap_gridded <- function(r, legend = TRUE,
     ggplot2::geom_polygon(fill = "gray70", alpha = 0.4) +
     ggplot2::coord_fixed(
       xlim = c(e["xmin"], e["xmax"]),
-      ylim = c(e["ymin"], e["ymax"])) +
+      ylim = c(e["ymin"], e["ymax"])
+    ) +
     raquamaps_theme_gridded() +
-    ggplot2::geom_raster(data = df,
-                         ggplot2::aes(x, y, fill = z, group = NULL)) +
-    ggplot2::scale_fill_brewer(type = "seq", palette = "YlOrRd",
-                               name = legend_title)
+    ggplot2::geom_raster(
+      data = df,
+      ggplot2::aes(x, y, fill = z, group = NULL)
+    ) +
+    ggplot2::scale_fill_brewer(
+      type = "seq", palette = "YlOrRd",
+      name = legend_title
+    )
   if (!legend) map <- map + ggplot2::guides(fill = "none")
   return(map)
 }
@@ -136,21 +151,30 @@ occs_ggmap_gridded_polys <- function(r) {
   world <- ggplot2::map_data(map = "world")
   map <-
     ggplot2::ggplot() +
-    ggplot2::geom_polygon(data = world,
-                 ggplot2::aes(long, lat, group = group),
-                 fill = "gray90", color = "gray90", linewidth = 0.2) +
-    ggplot2::geom_polygon(data = polyg,
-                 ggplot2::aes(x = long, y = lat, group = group,
-                     fill = as.factor(bin)), alpha = 0.8) +
+    ggplot2::geom_polygon(
+      data = world,
+      ggplot2::aes(long, lat, group = group),
+      fill = "gray90", color = "gray90", linewidth = 0.2
+    ) +
+    ggplot2::geom_polygon(
+      data = polyg,
+      ggplot2::aes(
+        x = long, y = lat, group = group,
+        fill = as.factor(bin)
+      ), alpha = 0.8
+    ) +
     ggplot2::scale_fill_manual(
       name = NA,
       labels = breaks,
-      values = cols) +
+      values = cols
+    ) +
     ggplot2::labs(x = "", y = "") +
     raquamaps_theme() +
-    ggplot2::coord_fixed(ratio = 1,
-                xlim = c(e["xmin"], e["xmax"]),
-                ylim = c(e["ymin"], e["ymax"]))
+    ggplot2::coord_fixed(
+      ratio = 1,
+      xlim = c(e["xmin"], e["xmax"]),
+      ylim = c(e["ymin"], e["ymax"])
+    )
   return(map)
 }
 
@@ -164,15 +188,20 @@ occs_webmap_gridded <- function(r, legend_title = NA) {
   colors <- RColorBrewer::brewer.pal(7, "YlOrRd")[3:7]
   vals <- stats::na.omit(unique(terra::values(r, mat = FALSE)))
   pal <- leaflet::colorBin(colors, vals,
-                  bins = 5, pretty = TRUE, na.color = "transparent")
+    bins = 5, pretty = TRUE, na.color = "transparent"
+  )
   e <- as.vector(terra::ext(r))
   map <-
     leaflet::leaflet() |>
     leaflet::addProviderTiles(provider = "CartoDB.Positron") |>
     leaflet::addRasterImage(r, colors = pal, opacity = 0.8) |>
-    leaflet::addLegend(pal = pal, values = terra::values(r, mat = FALSE),
-                       title = legend_title) |>
-    leaflet::fitBounds(lng1 = e["xmin"], lat1 = e["ymin"],
-                       lng2 = e["xmax"], lat2 = e["ymax"])
+    leaflet::addLegend(
+      pal = pal, values = terra::values(r, mat = FALSE),
+      title = legend_title
+    ) |>
+    leaflet::fitBounds(
+      lng1 = e["xmin"], lat1 = e["ymin"],
+      lng2 = e["xmax"], lat2 = e["ymax"]
+    )
   return(map)
 }

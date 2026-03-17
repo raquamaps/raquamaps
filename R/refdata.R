@@ -1,6 +1,6 @@
 #' Half degree cell authority file for the world (259,200 cells) with bioclimate data
 #'
-#' A dataset containing reference data for bioclimate variables 
+#' A dataset containing reference data for bioclimate variables
 #'
 #' @format A data frame [259,200 x 16]
 #' \describe{
@@ -27,7 +27,7 @@
 
 #' Half degree cell authority file for EU with bioclimate data (8,493 cells)
 #'
-#' A dataset containing reference data for bioclimate variables 
+#' A dataset containing reference data for bioclimate variables
 #'
 #' @format A data frame [8,593 x 12]
 #' \describe{
@@ -50,7 +50,7 @@
 
 #' Half degree cell metadata (only identifiers and coordinates)
 #'
-#' A dataset containing metadata such as identifiers (CsquareCod, LOICZID) and bbox coords  
+#' A dataset containing metadata such as identifiers (CsquareCod, LOICZID) and bbox coords
 #'
 #' @format A data frame [8,593 x 12]
 #' \describe{
@@ -148,7 +148,7 @@
 
 #' Quarter degree cell metadata (only identifiers and coordinates)
 #'
-#' A dataset containing metadata such as identifiers and bbox coords  
+#' A dataset containing metadata such as identifiers and bbox coords
 #'
 #' @format A data frame
 #' \describe{
@@ -178,10 +178,9 @@
 "aquamaps_qc"
 
 
-
 #' Half degree cell data (various bioclimate layers)
 #'
-#' A dataset containing identifiers and bioclimate layers  
+#' A dataset containing identifiers and bioclimate layers
 #'
 #' @format A data frame
 #' \describe{
@@ -320,4 +319,3 @@
 #' }
 #' @source \url{https://www.aquamaps.org/}
 "aquatic_hcaf"
-

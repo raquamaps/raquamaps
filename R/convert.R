@@ -49,8 +49,10 @@ which_cells_in_raster <- function(r, lower_limit = 0) {
 #' @export
 stepped_raster <- function(r, n = 5, interval_style = "fisher") {
   v <- stats::na.omit(terra::values(r, mat = FALSE))
-  ints <- classInt::classIntervals(v, n = n,
-                                   style = interval_style, na.rm = TRUE, unique = FALSE)
+  ints <- classInt::classIntervals(v,
+    n = n,
+    style = interval_style, na.rm = TRUE, unique = FALSE
+  )
   n_obs <- cut(terra::values(r, mat = FALSE), breaks = ints$brks)
   breaks <- levels(n_obs)
   message("Discretizing this raster using intervals:\n", breaks)

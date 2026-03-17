@@ -4,9 +4,8 @@ test_that("Can get HCAF ref data from dropbox folder", {
   dropbox_share <- "7yzcbdgm5m9axht/PUnf7vugFc"
   #  expect_equal(get_dropbox_as_zip(dropbox_share), 0)
   expect_true(TRUE)
-  return (TRUE)
+  return(TRUE)
 })
-
 
 
 # expect_true(x)

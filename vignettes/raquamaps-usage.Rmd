@@ -61,20 +61,19 @@ r <- rasterize_occs(o)
 We now inspect this on a map:
 
 ```{r, echo=TRUE, message=FALSE, warning=FALSE}
-#occs_ggmap_gridded_polys(r)
+# occs_ggmap_gridded_polys(r)
 occs_ggmap_gridded(r, legend = FALSE)
 ```
 
 We immediately find that it is hard to see such small pixels (half degree cells)... and want to zoom in.
 
 ```{r, echo=TRUE, message=FALSE, warning=FALSE}
-
 geocode <- function(geoname) {
-  geoname |> 
-  geocode_nominatim() |> 
-  dplyr::select(any_of(c("lat", "lon"))) |> 
-  dplyr::mutate(across(everything(), as.double)) |> 
-  dplyr::select(c("lon", "lat"))
+  geoname |>
+    geocode_nominatim() |>
+    dplyr::select(any_of(c("lat", "lon"))) |>
+    dplyr::mutate(across(everything(), as.double)) |>
+    dplyr::select(c("lon", "lat"))
 }
 
 # are there observations outside Cape Town?
@@ -92,7 +91,6 @@ occs_ggmap_gridded(r, center = p, padding = 30)
 # Australian East-Coast?
 p <- geocode("Surfer's Paradise, Australia")
 occs_ggmap_gridded(r, center = p, padding = 10)
-
 ```
 
 To really be able to zoom and check out details
@@ -127,7 +125,7 @@ we remove 0, 0 (seems to be a data error?)
 and everything above lat > 45
 
 ```{r, echo=TRUE, message=FALSE, warning=FALSE}
-o <- o %>% 
+o <- o %>%
   filter((!is.na(decimalLatitude)), (!is.na(decimalLongitude))) %>%
   filter(!(decimalLatitude == 0 & decimalLongitude == 0)) %>%
   filter(decimalLatitude < 45)
@@ -136,7 +134,7 @@ o <- o %>%
 hist(o$decimalLatitude)
 hist(o$decimalLongitude)
 
-# compile the summary grid, 
+# compile the summary grid,
 # trim the grid and map it
 r <- rasterize_occs(o)
 occs_ggmap_gridded(terra::trim(r), legend = FALSE)
@@ -154,6 +152,6 @@ hist(terra::values(r, mat = FALSE), xlab = "count", main = "")
 
 # quickly plot the raster
 terra::plot(terra::trim(r))
-#spplot(trim(r))
-#quantile(r, na.rm = TRUE)
+# spplot(trim(r))
+# quantile(r, na.rm = TRUE)
 ```

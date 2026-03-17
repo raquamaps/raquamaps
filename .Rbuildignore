@@ -20,3 +20,4 @@ inst/api
 ^_pkgdown\.yml$
 ^docs$
 ^pkgdown$
+^\.lintr$

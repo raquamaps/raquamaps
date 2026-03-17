@@ -15,20 +15,24 @@
 #' @importFrom utils URLencode
 #' @export
 geocode_nominatim <- function(address) {
-
-  if (suppressWarnings(is.null(address)))
+  if (suppressWarnings(is.null(address))) {
     return(data.frame())
+  }
 
   api <-
-    "https://nominatim.openstreetmap.org/search.php?q=%s&format=json&addressdetails=1&limit=1" |>    
+    "https://nominatim.openstreetmap.org/search.php?q=%s&format=json&addressdetails=1&limit=1" |>
     sprintf(URLencode(address))
 
   d <- tryCatch(
     jsonlite::fromJSON(api, simplifyDataFrame = TRUE, flatten = TRUE),
-    error = function(e) return(data.frame())
+    error = function(e) {
+      return(data.frame())
+    }
   )
 
-  if (length(d) == 0) return (data.frame())
+  if (length(d) == 0) {
+    return(data.frame())
+  }
 
-  return (as_tibble(d))
+  return(as_tibble(d))
 }
